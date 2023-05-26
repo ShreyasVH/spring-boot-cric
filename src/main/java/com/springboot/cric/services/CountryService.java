@@ -43,4 +43,8 @@ public class CountryService {
 	public long getTotalCount() {
 		return countryRepository.count();
 	}
+
+	public Country getById(Long id) {
+		return countryRepository.findById(id).orElse(null);
+	}
 }
