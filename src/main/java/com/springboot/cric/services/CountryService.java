@@ -3,6 +3,8 @@ package com.springboot.cric.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import com.springboot.cric.models.Country;
 import com.springboot.cric.repositories.CountryRepository;
@@ -28,5 +30,15 @@ public class CountryService {
 
 	public List<Country> searchByName(String name) {
 		return countryRepository.findByNameContainingIgnoringCase(name);
+	}
+
+	public List<Country> getAll(int page, int limit) {
+		PageRequest pageRequest = PageRequest.of(page - 1, limit);
+		Page<Country> countriesPage = countryRepository.findAll(pageRequest);
+		return countriesPage.getContent();
+	}
+
+	public long getTotalCount() {
+		return countryRepository.count();
 	}
 }
