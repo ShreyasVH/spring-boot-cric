@@ -35,7 +35,10 @@ public class CountryController {
     public Response getAll(@RequestParam(name = "page") int page, @RequestParam(name = "limit") int limit) {
         List<Country> countries = countryService.getAll(page, limit);
         List<CountryResponse> countryResponses = countries.stream().map(country -> new CountryResponse(country)).collect(Collectors.toList());
-        long totalCount = countryService.getTotalCount();
+        long totalCount = 0L;
+        if(page == 1) {
+            totalCount = countryService.getTotalCount();
+        }
 
         PaginatedResponse<CountryResponse> paginatedResponse = new PaginatedResponse(totalCount, countryResponses, page, limit);
         return new Response(paginatedResponse);
