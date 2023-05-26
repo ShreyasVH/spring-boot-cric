@@ -1,0 +1,13 @@
+# maven path
+export PATH=
+
+# java path
+export PATH=
+
+export PORT=
+
+export POSTGRES_IP=
+export POSTGRES_PORT=
+export POSTGRES_DB=
+export POSTGRES_USER=
+export POSTGRES_PASSWORD=
