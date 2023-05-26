@@ -2,6 +2,8 @@ package com.springboot.cric.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -36,5 +38,22 @@ public class StadiumController {
         Stadium stadium = stadiumService.create(request);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new Response(new StadiumResponse(stadium, new CountryResponse(country))));
+    }
+
+    @GetMapping("/cric/v1/stadiums")
+    public ResponseEntity<Response> getAll(@RequestParam(name = "page") int page, @RequestParam(name = "limit") int limit) {
+        List<Stadium> stadiums = stadiumService.getAll(page, limit);
+        List<Long> countryIds = stadiums.stream().map(Stadium::getCountryId).collect(Collectors.toList());
+        List<Country> countries = countryService.getByIds(countryIds);
+        Map<Long, Country> countryMap = countries.stream().collect(Collectors.toMap(Country::getId, country -> country));
+
+        List<StadiumResponse> stadiumResponses = stadiums.stream().map(stadium -> new StadiumResponse(stadium, new CountryResponse(countryMap.get(stadium.getCountryId())))).collect(Collectors.toList());
+        long totalCount = 0L;
+        if(page == 1) {
+            totalCount = stadiumService.getTotalCount();
+        }
+
+        PaginatedResponse<StadiumResponse> paginatedResponse = new PaginatedResponse<>(totalCount, stadiumResponses, page, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(paginatedResponse));
     }
 }

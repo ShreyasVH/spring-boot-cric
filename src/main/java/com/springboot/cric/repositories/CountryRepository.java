@@ -10,4 +10,5 @@ import com.springboot.cric.models.Country;
 public interface CountryRepository extends JpaRepository<Country, Long> {
 	Country findByName(String name);
 	List<Country> findByNameContainingIgnoringCase(String name);
+	List<Country> findByIdIn(List<Long> ids);
 }

@@ -1,5 +1,6 @@
 package com.springboot.cric.services;
 
+import com.springboot.cric.models.Country;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -27,5 +28,16 @@ public class StadiumService {
 
         Stadium stadium = new Stadium(createRequest);
         return stadiumRepository.save(stadium);
+    }
+
+    public List<Stadium> getAll(int page, int limit) {
+        Sort sort = Sort.by(Sort.Direction.fromString("asc"), "name");
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+        Page<Stadium> stadiumsPage = stadiumRepository.findAll(pageRequest);
+        return stadiumsPage.getContent();
+    }
+
+    public long getTotalCount() {
+        return stadiumRepository.count();
     }
 }
