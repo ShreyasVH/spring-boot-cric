@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import com.springboot.cric.models.Country;
 import com.springboot.cric.repositories.CountryRepository;
@@ -33,7 +34,8 @@ public class CountryService {
 	}
 
 	public List<Country> getAll(int page, int limit) {
-		PageRequest pageRequest = PageRequest.of(page - 1, limit);
+		Sort sort = Sort.by(Sort.Direction.fromString("asc"), "name");
+		PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
 		Page<Country> countriesPage = countryRepository.findAll(pageRequest);
 		return countriesPage.getContent();
 	}
