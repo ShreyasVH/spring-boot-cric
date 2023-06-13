@@ -1,6 +1,10 @@
 package com.springboot.cric.services;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.springboot.cric.exceptions.ConflictException;
@@ -23,5 +27,16 @@ public class PlayerService {
 
         Player player = new Player(createRequest);
         return playerRepository.save(player);
+    }
+
+    public List<Player> getAll(int page, int limit) {
+        Sort sort = Sort.by(Sort.Direction.fromString("asc"), "name");
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+        Page<Player> playersPage = playerRepository.findAll(pageRequest);
+        return playersPage.getContent();
+    }
+
+    public long getTotalCount() {
+        return playerRepository.count();
     }
 }
