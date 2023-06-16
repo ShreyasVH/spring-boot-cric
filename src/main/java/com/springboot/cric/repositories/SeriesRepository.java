@@ -1,0 +1,10 @@
+package com.springboot.cric.repositories;
+
+import com.springboot.cric.models.Series;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface SeriesRepository extends JpaRepository<Series, Long> {
+    Series findByNameAndTourIdAndGameTypeId(String name, Long tourId, Integer gameTypeId);
+}

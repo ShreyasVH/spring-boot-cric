@@ -41,4 +41,8 @@ public class TeamService {
     public long getTotalCount() {
         return teamRepository.count();
     }
+
+    public List<Team> getByIds(List<Long> ids) {
+        return teamRepository.findAllById(ids);
+    }
 }
