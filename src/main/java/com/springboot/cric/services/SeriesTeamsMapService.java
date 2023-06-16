@@ -17,4 +17,8 @@ public class SeriesTeamsMapService {
         List<SeriesTeamsMap> seriesTeamsMaps = teamIds.stream().map(teamId -> new SeriesTeamsMap(null, seriesId, teamId)).collect(Collectors.toList());
         seriesTeamsMapRepository.saveAll(seriesTeamsMaps);
     }
+
+    public List<SeriesTeamsMap> getBySeriesIds(List<Long> seriesIds) {
+        return seriesTeamsMapRepository.findAllBySeriesIdIn(seriesIds);
+    }
 }

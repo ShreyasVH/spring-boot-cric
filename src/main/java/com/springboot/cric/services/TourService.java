@@ -8,6 +8,8 @@ import com.springboot.cric.repositories.TourRepository;
 import com.springboot.cric.requests.tours.CreateRequest;
 import com.springboot.cric.exceptions.ConflictException;
 
+import java.util.List;
+
 @Service
 public class TourService {
     @Autowired
@@ -27,5 +29,9 @@ public class TourService {
 
     public Tour getById(Long id) {
         return tourRepository.findById(id).orElse(null);
+    }
+
+    public List<Tour> getByIds(List<Long> ids) {
+        return tourRepository.findAllById(ids);
     }
 }

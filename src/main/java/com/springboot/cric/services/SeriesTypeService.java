@@ -16,4 +16,8 @@ public class SeriesTypeService {
     public SeriesType getById(Integer id) {
         return seriesTypeRepository.findById(id).orElse(null);
     }
+
+    public List<SeriesType> getByIds(List<Integer> ids) {
+        return seriesTypeRepository.findAllById(ids);
+    }
 }

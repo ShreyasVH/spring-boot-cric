@@ -16,4 +16,8 @@ public class GameTypeService {
     public GameType getById(Integer id) {
         return gameTypeRepository.findById(id).orElse(null);
     }
+
+    public List<GameType> getByIds(List<Integer> ids) {
+        return gameTypeRepository.findAllById(ids);
+    }
 }
