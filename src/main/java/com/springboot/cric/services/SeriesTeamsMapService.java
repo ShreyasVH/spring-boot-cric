@@ -21,4 +21,9 @@ public class SeriesTeamsMapService {
     public List<SeriesTeamsMap> getBySeriesIds(List<Long> seriesIds) {
         return seriesTeamsMapRepository.findAllBySeriesIdIn(seriesIds);
     }
+
+    public void delete(Long seriesId, List<Long> teamIds) {
+        List<SeriesTeamsMap> seriesTeamsMaps = seriesTeamsMapRepository.findAllBySeriesIdAndTeamIdIn(seriesId, teamIds);
+        seriesTeamsMapRepository.deleteAll(seriesTeamsMaps);
+    }
 }

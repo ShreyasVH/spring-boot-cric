@@ -20,7 +20,7 @@ public class TourService {
 
         Tour existingTour = tourRepository.findByNameAndStartTime(createRequest.getName(), createRequest.getStartTime());
         if(null != existingTour) {
-            throw new ConflictException("Country");
+            throw new ConflictException("Tour");
         }
 
         Tour tour = new Tour(createRequest);
