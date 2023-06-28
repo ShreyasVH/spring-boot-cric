@@ -33,7 +33,7 @@ public class PlayerController {
 
         Player player = playerService.create(request);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Response(new PlayerResponse(player, new CountryResponse(country))));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Response(new PlayerMiniResponse(player, new CountryResponse(country))));
     }
 
     @GetMapping("/cric/v1/players")
@@ -43,13 +43,13 @@ public class PlayerController {
         List<Country> countries = countryService.getByIds(countryIds);
         Map<Long, Country> countryMap = countries.stream().collect(Collectors.toMap(Country::getId, country -> country));
 
-        List<PlayerResponse> playerResponses = players.stream().map(player -> new PlayerResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
+        List<PlayerMiniResponse> playerResponses = players.stream().map(player -> new PlayerMiniResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
         long totalCount = 0L;
         if(page == 1) {
             totalCount = playerService.getTotalCount();
         }
 
-        PaginatedResponse<PlayerResponse> paginatedResponse = new PaginatedResponse<>(totalCount, playerResponses, page, limit);
+        PaginatedResponse<PlayerMiniResponse> paginatedResponse = new PaginatedResponse<>(totalCount, playerResponses, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(new Response(paginatedResponse));
     }
 }

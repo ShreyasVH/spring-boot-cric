@@ -150,7 +150,7 @@ public class SeriesController {
 
         List<TeamResponse> teamResponses = teams.stream().map(team -> new TeamResponse(team, new CountryResponse(countryMap.get(team.getCountryId())), new TeamTypeResponse(teamTypeMap.get(team.getTypeId())))).collect(Collectors.toList());
 
-        List<PlayerResponse> playerResponses = players.stream().map(player -> new PlayerResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
+        List<PlayerMiniResponse> playerResponses = players.stream().map(player -> new PlayerMiniResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
 
         List<SeriesResponse> seriesResponses = seriesList.stream().map(series -> new SeriesResponse(series, new CountryResponse(countryMap.get(series.getHomeCountryId())), new TourResponse(tourMap.get(series.getTourId())), new SeriesTypeResponse(seriesTypeMap.get(series.getTypeId())), new GameTypeResponse(gameTypeMap.get(series.getGameTypeId())), teamResponses, playerResponses)).collect(Collectors.toList());
 
@@ -284,7 +284,7 @@ public class SeriesController {
 
         List<TeamResponse> teamResponses = teams.stream().map(team -> new TeamResponse(team, new CountryResponse(countryMap.get(team.getCountryId())), new TeamTypeResponse(teamTypeMap.get(team.getTypeId())))).collect(Collectors.toList());
 
-        List<PlayerResponse> playerResponses = players.stream().map(player -> new PlayerResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
+        List<PlayerMiniResponse> playerResponses = players.stream().map(player -> new PlayerMiniResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(new Response(new SeriesResponse(existingSeries, new CountryResponse(country), new TourResponse(tour), new SeriesTypeResponse(seriesType), new GameTypeResponse(gameType), teamResponses, playerResponses)));
     }
 }

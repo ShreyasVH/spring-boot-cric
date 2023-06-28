@@ -1,6 +1,5 @@
 package com.springboot.cric.services;
 
-import com.springboot.cric.models.Country;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -39,5 +38,10 @@ public class StadiumService {
 
     public long getTotalCount() {
         return stadiumRepository.count();
+    }
+
+    public Stadium getById(Long id)
+    {
+        return stadiumRepository.findById(id).orElse(null);
     }
 }

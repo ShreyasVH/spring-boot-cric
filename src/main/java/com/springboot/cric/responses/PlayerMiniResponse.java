@@ -13,7 +13,7 @@ import com.springboot.cric.models.Player;
 
 @Data
 @NoArgsConstructor
-public class PlayerResponse {
+public class PlayerMiniResponse {
     private Long id;
     private String name;
     private CountryResponse country;
@@ -23,7 +23,7 @@ public class PlayerResponse {
     private LocalDate dateOfBirth;
     private String image;
 
-    public PlayerResponse(Player player, CountryResponse country) {
+    public PlayerMiniResponse(Player player, CountryResponse country) {
         this.id = player.getId();
         this.name = player.getName();
         this.country = country;
