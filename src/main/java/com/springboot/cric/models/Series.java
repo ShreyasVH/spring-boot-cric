@@ -37,7 +37,7 @@ public class Series {
         this.homeCountryId = createRequest.getHomeCountryId();
         this.tourId = createRequest.getTourId();
         this.typeId = createRequest.getTypeId();
-        this.gameTypeId = createRequest.getTypeId();
+        this.gameTypeId = createRequest.getGameTypeId();
         this.startTime = createRequest.getStartTime();
     }
 }

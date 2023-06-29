@@ -25,18 +25,18 @@ public class BattingStats {
     private Integer threeHundreds = 0;
     private Integer fourHundreds = 0;
 
-//    public BattingStats(Map<String, Integer> basicStats)
-//    {
-//        this.runs = basicStats.getOrDefault("runs", 0);
-//        this.balls = basicStats.getOrDefault("balls", 0);
-//        this.innings = basicStats.getOrDefault("innings", 0);
-//        this.fours = basicStats.getOrDefault("fours", 0);
-//        this.sixes = basicStats.getOrDefault("sixes", 0);
-//        this.highest = basicStats.get("highest");
-//        this.fifties = basicStats.get("fifties");
-//        this.hundreds = basicStats.get("hundreds");
-//        this.twoHundreds = basicStats.get("twoHundreds");
-//        this.threeHundreds = basicStats.get("threeHundreds");
-//        this.fourHundreds = basicStats.get("fourHundreds");
-//    }
+    public BattingStats(Map<String, Integer> basicStats)
+    {
+        this.runs = basicStats.getOrDefault("runs", 0);
+        this.balls = basicStats.getOrDefault("balls", 0);
+        this.innings = basicStats.getOrDefault("innings", 0);
+        this.fours = basicStats.getOrDefault("fours", 0);
+        this.sixes = basicStats.getOrDefault("sixes", 0);
+        this.highest = basicStats.get("highest");
+        this.fifties = basicStats.get("fifties");
+        this.hundreds = basicStats.get("hundreds");
+        this.twoHundreds = basicStats.get("twoHundreds");
+        this.threeHundreds = basicStats.get("threeHundreds");
+        this.fourHundreds = basicStats.get("fourHundreds");
+    }
 }
