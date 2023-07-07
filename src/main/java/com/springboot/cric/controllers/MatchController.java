@@ -38,14 +38,6 @@ public class MatchController {
     @Autowired
     private PlayerService playerService;
     @Autowired
-    private TourService tourService;
-    @Autowired
-    private SeriesTypeService seriesTypeService;
-    @Autowired
-    private GameTypeService gameTypeService;
-    @Autowired
-    private SeriesTeamsMapService seriesTeamsMapService;
-    @Autowired
     private MatchPlayerMapService matchPlayerMapService;
     @Autowired
     private BattingScoreService battingScoreService;
@@ -76,18 +68,10 @@ public class MatchController {
             throw new NotFoundException("Series");
         }
         List<Long> countryIds = new ArrayList<>();
-        countryIds.add(series.getHomeCountryId());
-
-        Tour tour = tourService.getById(series.getId());
-        SeriesType seriesType = seriesTypeService.getById(series.getTypeId());
-        GameType gameType = gameTypeService.getById(series.getTypeId());
-        List<SeriesTeamsMap> seriesTeamsMaps = seriesTeamsMapService.getBySeriesIds(Collections.singletonList(series.getId()));
-        List<Long> seriesTeamIds = seriesTeamsMaps.stream().map(SeriesTeamsMap::getTeamId).collect(Collectors.toList());
 
         List<Long> teamIds = new ArrayList<>();
         teamIds.add(createRequest.getTeam1Id());
         teamIds.add(createRequest.getTeam2Id());
-        teamIds.addAll(seriesTeamIds);
         List<Team> teams = teamService.getByIds(teamIds);
         Map<Long, Team> teamMap = new HashMap<>();
         for(Team team: teams)
@@ -247,26 +231,11 @@ public class MatchController {
         captainService.add(createRequest.getCaptains(), playerToMatchPlayerMap);
         wicketKeeperService.add(createRequest.getWicketKeepers(), playerToMatchPlayerMap);
 
-        List<TeamResponse> seriesTeamResponses = seriesTeamIds.stream().map(teamId -> {
-            Team team = teamMap.get(teamId);
-            return new TeamResponse(team, new CountryResponse(countryMap.get(team.getCountryId())), new TeamTypeResponse(teamTypeMap.get(team.getTypeId())));
-        }).collect(Collectors.toList());
-
-        SeriesResponse seriesResponse = new SeriesResponse(
-                series,
-                new CountryResponse(countryMap.get(series.getHomeCountryId())),
-                new TourResponse(tour),
-                new SeriesTypeResponse(seriesType),
-                new GameTypeResponse(gameType),
-                seriesTeamResponses,
-                new ArrayList<>()
-        );
-
         List<PlayerMiniResponse> playerResponses = allPlayers.stream().map(player -> new PlayerMiniResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
 
         MatchResponse matchResponse = new MatchResponse(
                 match,
-                seriesResponse,
+                series,
                 new TeamResponse(team1, new CountryResponse(countryMap.get(team1.getCountryId())), new TeamTypeResponse(teamTypeMap.get(team1.getTypeId()))),
                 new TeamResponse(team2, new CountryResponse(countryMap.get(team2.getCountryId())), new TeamTypeResponse(teamTypeMap.get(team2.getTypeId()))),
                 new ResultTypeResponse(resultType),
