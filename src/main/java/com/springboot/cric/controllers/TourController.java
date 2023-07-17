@@ -40,4 +40,11 @@ public class TourController {
         PaginatedResponse<TourResponse> paginatedResponse = new PaginatedResponse<>(totalCount, tourResponses, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(new Response(paginatedResponse));
     }
+
+    @GetMapping("/cric/v1/tours/years")
+    public ResponseEntity<Response> getAllYears() {
+        List<Integer> years = tourService.getAllYears();
+
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(years));
+    }
 }

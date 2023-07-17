@@ -1,5 +1,6 @@
 package com.springboot.cric.services;
 
+import com.springboot.cric.repositories.TourCustomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +19,8 @@ import java.util.List;
 public class TourService {
     @Autowired
     private TourRepository tourRepository;
+    @Autowired
+    private TourCustomRepository tourCustomRepository;
 
     public Tour create(CreateRequest createRequest) {
         createRequest.validate();
@@ -40,7 +43,7 @@ public class TourService {
     }
 
     public List<Tour> getAllForYear(int year, int page, int limit) {
-        Sort sort = Sort.by(Sort.Direction.fromString("asc"), "startTime");
+        Sort sort = Sort.by(Sort.Direction.fromString("desc"), "startTime");
         PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
         LocalDateTime startTime = LocalDateTime.of(year, 1, 1, 0, 0, 0);
         LocalDateTime endTime = startTime.plusYears(1L);
@@ -52,5 +55,9 @@ public class TourService {
         LocalDateTime startTime = LocalDateTime.of(year, 1, 1, 0, 0, 0);
         LocalDateTime endTime = startTime.plusYears(1L);
         return tourRepository.countAllByStartTimeBetween(startTime, endTime);
+    }
+
+    public List<Integer> getAllYears() {
+        return tourCustomRepository.getAllYears();
     }
 }
