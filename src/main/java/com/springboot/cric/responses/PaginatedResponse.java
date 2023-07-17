@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaginatedResponse<T> {
-	private long toalCount;
+	private long totalCount;
 	private List<T> items;
 	private int page;
 	private int limit;
