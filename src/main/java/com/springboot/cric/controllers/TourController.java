@@ -1,9 +1,12 @@
 package com.springboot.cric.controllers;
 
-import com.springboot.cric.models.Country;
-import com.springboot.cric.models.Player;
+import com.springboot.cric.exceptions.NotFoundException;
+import com.springboot.cric.models.GameType;
+import com.springboot.cric.models.Series;
 import com.springboot.cric.models.Tour;
 import com.springboot.cric.responses.*;
+import com.springboot.cric.services.GameTypeService;
+import com.springboot.cric.services.SeriesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -20,24 +23,28 @@ import java.util.stream.Collectors;
 public class TourController {
     @Autowired
     private TourService tourService;
+    @Autowired
+    private SeriesService seriesService;
+    @Autowired
+    private GameTypeService gameTypeService;
 
     @PostMapping("/cric/v1/tours")
     public ResponseEntity<Response> create(@RequestBody CreateRequest request)
     {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Response(new TourResponse(this.tourService.create(request))));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Response(new TourMiniResponse(this.tourService.create(request))));
     }
 
     @GetMapping("/cric/v1/tours/year/{year}")
     public ResponseEntity<Response> getAll(@PathVariable Integer year, @RequestParam(name = "page") int page, @RequestParam(name = "limit") int limit) {
         List<Tour> tours = tourService.getAllForYear(year, page, limit);
 
-        List<TourResponse> tourResponses = tours.stream().map(TourResponse::new).collect(Collectors.toList());
+        List<TourMiniResponse> tourResponses = tours.stream().map(TourMiniResponse::new).collect(Collectors.toList());
         long totalCount = 0L;
         if(page == 1) {
             totalCount = tourService.getTotalCountForYear(year);
         }
 
-        PaginatedResponse<TourResponse> paginatedResponse = new PaginatedResponse<>(totalCount, tourResponses, page, limit);
+        PaginatedResponse<TourMiniResponse> paginatedResponse = new PaginatedResponse<>(totalCount, tourResponses, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(new Response(paginatedResponse));
     }
 
@@ -46,5 +53,24 @@ public class TourController {
         List<Integer> years = tourService.getAllYears();
 
         return ResponseEntity.status(HttpStatus.OK).body(new Response(years));
+    }
+
+    @GetMapping("/cric/v1/tours/{id}")
+    public ResponseEntity<Response> getById(@PathVariable Long id) {
+        Tour tour = tourService.getById(id);
+        if(null == tour)
+        {
+            throw new NotFoundException("Tour");
+        }
+        TourResponse tourResponse = new TourResponse(tour);
+        List<Series> seriesList = seriesService.getByTourId(id);
+
+        List<Integer> gameTypeIds = seriesList.stream().map(Series::getGameTypeId).collect(Collectors.toList());
+        List<GameType> gameTypes = gameTypeService.getByIds(gameTypeIds);
+        Map<Integer, GameType> gameTypeMap = gameTypes.stream().collect(Collectors.toMap(GameType::getId, gameType -> gameType));
+
+        List<SeriesMiniResponse> seriesMiniResponses = seriesList.stream().map(series -> new SeriesMiniResponse(series, gameTypeMap.get(series.getGameTypeId()))).collect(Collectors.toList());
+        tourResponse.setSeriesList(seriesMiniResponses);
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(tourResponse));
     }
 }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import com.springboot.cric.models.Tour;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -21,6 +22,7 @@ public class TourResponse {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime startTime;
+    private List<SeriesMiniResponse> seriesList;
 
     public TourResponse(Tour tour) {
         this.id = tour.getId();

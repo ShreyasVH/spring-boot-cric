@@ -57,6 +57,8 @@ public class MatchController {
     private CaptainService captainService;
     @Autowired
     private WicketKeeperService wicketKeeperService;
+    @Autowired
+    private GameTypeService gameTypeService;
 
     @Transactional
     @PostMapping("/cric/v1/matches")
@@ -67,6 +69,9 @@ public class MatchController {
         {
             throw new NotFoundException("Series");
         }
+
+        GameType gameType = gameTypeService.getById(series.getGameTypeId());
+
         List<Long> countryIds = new ArrayList<>();
 
         List<Long> teamIds = new ArrayList<>();
@@ -236,6 +241,7 @@ public class MatchController {
         MatchResponse matchResponse = new MatchResponse(
                 match,
                 series,
+                gameType,
                 new TeamResponse(team1, new CountryResponse(countryMap.get(team1.getCountryId())), new TeamTypeResponse(teamTypeMap.get(team1.getTypeId()))),
                 new TeamResponse(team2, new CountryResponse(countryMap.get(team2.getCountryId())), new TeamTypeResponse(teamTypeMap.get(team2.getTypeId()))),
                 new ResultTypeResponse(resultType),

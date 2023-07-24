@@ -5,35 +5,26 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.springboot.cric.models.GameType;
-import com.springboot.cric.models.Series;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import com.springboot.cric.models.Tour;
 
 import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
-public class SeriesMiniResponse {
+public class TourMiniResponse {
     private Long id;
     private String name;
-    private Long homeCountryId;
-    private Long tourId;
-    private Integer typeId;
-    private GameTypeResponse gameType;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime startTime;
 
-    public SeriesMiniResponse(Series series, GameType gameType)
-    {
-        this.id = series.getId();
-        this.name = series.getName();
-        this.homeCountryId = series.getHomeCountryId();
-        this.tourId = series.getTourId();
-        this.typeId = series.getTypeId();
-        this.gameType = new GameTypeResponse(gameType);
-        this.startTime = series.getStartTime();
+    public TourMiniResponse(Tour tour) {
+        this.id = tour.getId();
+        this.name = tour.getName();
+        this.startTime = tour.getStartTime();
     }
 }

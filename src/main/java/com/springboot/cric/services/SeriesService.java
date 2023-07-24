@@ -84,4 +84,9 @@ public class SeriesService {
 
         return existingSeries;
     }
+
+    public List<Series> getByTourId(Long tourId)
+    {
+        return seriesRepository.findAllByTourIdOrderByStartTimeDesc(tourId);
+    }
 }
