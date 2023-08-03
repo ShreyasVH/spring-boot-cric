@@ -44,4 +44,9 @@ public class StadiumService {
     {
         return stadiumRepository.findById(id).orElse(null);
     }
+
+    public List<Stadium> getByIds(List<Long> ids)
+    {
+        return stadiumRepository.findAllById(ids);
+    }
 }

@@ -5,6 +5,8 @@ import com.springboot.cric.models.WinMarginType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class WinMarginTypeService {
     @Autowired
@@ -12,5 +14,9 @@ public class WinMarginTypeService {
 
     public WinMarginType getById(Integer id) {
         return winMarginTypeRepository.findById(id).orElse(null);
+    }
+
+    public List<WinMarginType> getByIds(List<Integer> ids) {
+        return winMarginTypeRepository.findAllById(ids);
     }
 }

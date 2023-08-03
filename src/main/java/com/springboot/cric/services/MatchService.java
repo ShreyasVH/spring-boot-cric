@@ -7,6 +7,8 @@ import com.springboot.cric.requests.matches.CreateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MatchService {
     @Autowired
@@ -24,5 +26,10 @@ public class MatchService {
 
         Match match = new Match(createRequest);
         return matchRepository.save(match);
+    }
+
+    public List<Match> getBySeriesId(Long seriesId)
+    {
+        return matchRepository.findAllBySeriesIdOrderByStartTime(seriesId);
     }
 }

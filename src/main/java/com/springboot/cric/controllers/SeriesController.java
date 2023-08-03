@@ -4,10 +4,7 @@ import com.springboot.cric.models.*;
 import com.springboot.cric.requests.series.UpdateRequest;
 import com.springboot.cric.responses.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.springboot.cric.services.*;
@@ -42,6 +39,14 @@ public class SeriesController {
     private ManOfTheSeriesService manOfTheSeriesService;
     @Autowired
     private PlayerService playerService;
+    @Autowired
+    private MatchService matchService;
+    @Autowired
+    private ResultTypeService resultTypeService;
+    @Autowired
+    private WinMarginTypeService winMarginTypeService;
+    @Autowired
+    private StadiumService stadiumService;
 
     @PostMapping("/cric/v1/series")
     @Transactional
@@ -286,5 +291,83 @@ public class SeriesController {
 
         List<PlayerMiniResponse> playerResponses = players.stream().map(player -> new PlayerMiniResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(new Response(new SeriesResponse(existingSeries, new CountryResponse(country), new TourMiniResponse(tour), new SeriesTypeResponse(seriesType), new GameTypeResponse(gameType), teamResponses, playerResponses)));
+    }
+
+    @GetMapping("/cric/v1/series/{id}")
+    public ResponseEntity<Response> getById(@PathVariable Long id)
+    {
+        Series series = seriesService.getById(id);
+        if(null == series)
+        {
+            throw new NotFoundException("Series");
+        }
+
+        SeriesType seriesType = seriesTypeService.getById(series.getTypeId());
+        GameType gameType = gameTypeService.getById(series.getGameTypeId());
+
+        List<SeriesTeamsMap> seriesTeamsMaps = seriesTeamsMapService.getBySeriesIds(Collections.singletonList(id));
+        List<Long> teamIds = seriesTeamsMaps.stream().map(SeriesTeamsMap::getTeamId).collect(Collectors.toList());
+        List<Team> teams = teamService.getByIds(teamIds);
+        List<Integer> teamTypeIds = new ArrayList<>();
+        List<Long> countryIds = new ArrayList<>();
+
+        for(Team team: teams)
+        {
+            teamTypeIds.add(team.getTypeId());
+            countryIds.add(team.getCountryId());
+        }
+
+        List<TeamType> teamTypes = teamTypeService.getByIds(teamTypeIds);
+        Map<Integer, TeamType> teamTypeMap = teamTypes.stream().collect(Collectors.toMap(TeamType::getId, teamType -> teamType));
+
+        List<Match> matches = matchService.getBySeriesId(id);
+
+        List<Long> stadiumIds = new ArrayList<>();
+        List<Integer> resultTypeIds = new ArrayList<>();
+        List<Integer> winMarginTypeIds = new ArrayList<>();
+
+        for(Match match: matches)
+        {
+            stadiumIds.add(match.getStadiumId());
+            resultTypeIds.add(match.getResultTypeId());
+            if(null != match.getWinMarginTypeId())
+            {
+                winMarginTypeIds.add(match.getWinMarginTypeId());
+            }
+        }
+        List<Stadium> stadiums = stadiumService.getByIds(stadiumIds);
+        Map<Long, Stadium> stadiumMap = new HashMap<>();
+        for(Stadium stadium: stadiums)
+        {
+            stadiumMap.put(stadium.getId(), stadium);
+            countryIds.add(stadium.getCountryId());
+        }
+
+        List<Country> countries = countryService.getByIds(countryIds);
+        Map<Long, Country> countryMap = countries.stream().collect(Collectors.toMap(Country::getId, country -> country));
+
+        List<TeamResponse> teamResponses = teams.stream().map(team -> new TeamResponse(team, new CountryResponse(countryMap.get(team.getCountryId())), new TeamTypeResponse(teamTypeMap.get(team.getTypeId())))).collect(Collectors.toList());
+        Map<Long, TeamResponse> teamResponseMap = teamResponses.stream().collect(Collectors.toMap(TeamResponse::getId, teamResponse -> teamResponse));
+
+        List<ResultType> resultTypes = resultTypeService.getByIds(resultTypeIds);
+        Map<Integer, ResultType> resultTypeMap = resultTypes.stream().collect(Collectors.toMap(ResultType::getId, resultType -> resultType));
+        List<WinMarginType> winMarginTypes = winMarginTypeService.getByIds(winMarginTypeIds);
+        Map<Integer, WinMarginType> winMarginTypeMap = winMarginTypes.stream().collect(Collectors.toMap(WinMarginType::getId, winMarginType -> winMarginType));
+
+        List<MatchMiniResponse> matchMiniResponses = matches.stream().map(match -> {
+            Stadium stadium = stadiumMap.get(match.getStadiumId());
+            return new MatchMiniResponse(
+                    match,
+                    teamResponseMap.get(match.getTeam1Id()),
+                    teamResponseMap.get(match.getTeam2Id()),
+                    resultTypeMap.get(match.getResultTypeId()),
+                    winMarginTypeMap.getOrDefault(match.getWinMarginTypeId(), null),
+                    new StadiumResponse(stadium, new CountryResponse(countryMap.get(stadium.getCountryId())))
+            );
+        }).collect(Collectors.toList());
+
+        SeriesDetailedResponse seriesResponse = new SeriesDetailedResponse(series, seriesType, gameType, teamResponses, matchMiniResponses);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(seriesResponse));
     }
 }
