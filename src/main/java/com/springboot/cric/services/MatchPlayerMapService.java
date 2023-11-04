@@ -19,4 +19,9 @@ public class MatchPlayerMapService {
         List<MatchPlayerMap> matchPlayerMaps = playerIds.stream().map(playerId -> new MatchPlayerMap(null, matchId, playerId, playerTeamMap.get(playerId))).collect(Collectors.toList());
         return matchPlayerMapRepository.saveAll(matchPlayerMaps);
     }
+
+    public List<MatchPlayerMap> getByMatchId(Integer matchId)
+    {
+        return matchPlayerMapRepository.findAllByMatchId(matchId);
+    }
 }

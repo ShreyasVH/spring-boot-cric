@@ -19,4 +19,9 @@ public class CaptainService {
         List<Captain> captains = playerIds.stream().map(playerId -> new Captain(null, matchPlayerMap.get(playerId))).collect(Collectors.toList());
         return captainRepository.saveAll(captains);
     }
+
+    public List<Captain> getByMatchPlayerIds(List<Integer> matchPlayerIds)
+    {
+        return captainRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
+    }
 }

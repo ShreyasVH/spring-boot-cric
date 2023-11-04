@@ -19,4 +19,9 @@ public class ManOfTheMatchService {
         List<ManOfTheMatch> manOfTheMatchList = playerIds.stream().map(playerId -> new ManOfTheMatch(null, matchPlayerMap.get(playerId))).collect(Collectors.toList());
         return manOfTheMatchRepository.saveAll(manOfTheMatchList);
     }
+
+    public List<ManOfTheMatch> getByMatchPlayerIds(List<Integer> matchPlayerIds)
+    {
+        return manOfTheMatchRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
+    }
 }

@@ -28,4 +28,9 @@ public class BowlingFigureService {
     {
         return bowlingFigureCustomRepository.getBasicBowlingStats(playerId);
     }
+
+    public List<BowlingFigure> get(List<Integer> matchPlayerIds)
+    {
+        return bowlingFigureRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
+    }
 }

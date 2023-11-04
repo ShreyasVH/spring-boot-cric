@@ -35,4 +35,9 @@ public class BattingScoreService {
     {
         return battingScoreCustomRepository.getBattingStats(playerId);
     }
+
+    public List<BattingScore> getBattingScores(List<Integer> matchPlayerIds)
+    {
+        return battingScoreRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
+    }
 }

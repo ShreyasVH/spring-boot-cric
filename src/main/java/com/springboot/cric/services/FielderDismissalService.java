@@ -32,4 +32,9 @@ public class FielderDismissalService {
     {
         return fielderDismissalCustomRepository.getFieldingStats(playerId);
     }
+
+    public List<FielderDismissal> get(List<Integer> matchPlayerIds)
+    {
+        return fielderDismissalRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
+    }
 }

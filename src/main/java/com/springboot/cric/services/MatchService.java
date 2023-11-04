@@ -32,4 +32,9 @@ public class MatchService {
     {
         return matchRepository.findAllBySeriesIdOrderByStartTime(seriesId);
     }
+
+    public Match getById(Integer id)
+    {
+        return matchRepository.findById(id).orElse(null);
+    }
 }

@@ -19,4 +19,9 @@ public class WicketKeeperService {
         List<WicketKeeper> wicketKeepers = playerIds.stream().map(playerId -> new WicketKeeper(null, matchPlayerMap.get(playerId))).collect(Collectors.toList());
         return wicketKeeperRepository.saveAll(wicketKeepers);
     }
+
+    public List<WicketKeeper> getByMatchPlayerIds(List<Integer> matchPlayerIds)
+    {
+        return wicketKeeperRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
+    }
 }

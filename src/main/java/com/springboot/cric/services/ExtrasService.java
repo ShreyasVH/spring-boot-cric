@@ -20,4 +20,9 @@ public class ExtrasService {
         List<Extras> extrasList = extrasRequests.stream().map(extrasRequest -> new Extras(matchId, extrasRequest)).collect(Collectors.toList());
         return extrasRepository.saveAll(extrasList);
     }
+
+    public List<Extras> getByMatchId(Integer matchId)
+    {
+        return extrasRepository.findAllByMatchId(matchId);
+    }
 }
