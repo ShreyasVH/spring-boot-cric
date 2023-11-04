@@ -1,0 +1,1 @@
+alter table fielder_dismissals alter column match_player_id type integer;
