@@ -89,4 +89,9 @@ public class SeriesService {
     {
         return seriesRepository.findAllByTourIdOrderByStartTimeDesc(tourId);
     }
+
+    public void remove(Long id)
+    {
+        seriesRepository.deleteById(id);
+    }
 }

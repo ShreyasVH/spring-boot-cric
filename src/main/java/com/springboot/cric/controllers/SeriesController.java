@@ -1,5 +1,6 @@
 package com.springboot.cric.controllers;
 
+import com.springboot.cric.exceptions.ConflictException;
 import com.springboot.cric.models.*;
 import com.springboot.cric.requests.series.UpdateRequest;
 import com.springboot.cric.responses.*;
@@ -369,5 +370,26 @@ public class SeriesController {
         SeriesDetailedResponse seriesResponse = new SeriesDetailedResponse(series, seriesType, gameType, teamResponses, matchMiniResponses);
 
         return ResponseEntity.status(HttpStatus.OK).body(new Response(seriesResponse));
+    }
+
+    @Transactional
+    @DeleteMapping("/cric/v1/series/{id}")
+    public ResponseEntity<Response> remove(@PathVariable Long id) {
+        Series series = seriesService.getById(id);
+        if (null == series) {
+            throw new NotFoundException("Series");
+        }
+
+        List<Match> matches = matchService.getBySeriesId(id);
+        if(!matches.isEmpty())
+        {
+            throw new ConflictException("Matches still exist");
+        }
+
+        manOfTheSeriesService.remove(id);
+        seriesTeamsMapService.remove(id);
+        seriesService.remove(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new Response("Deleted successfully", true));
     }
 }

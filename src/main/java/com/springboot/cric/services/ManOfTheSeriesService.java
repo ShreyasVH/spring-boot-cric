@@ -5,6 +5,7 @@ import com.springboot.cric.repositories.ManOfTheSeriesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,5 +26,10 @@ public class ManOfTheSeriesService {
     public void delete(Long seriesId, List<Long> playerIds) {
         List<ManOfTheSeries> manOfTheSeriesList = manOfTheSeriesRepository.findAllBySeriesIdAndPlayerIdIn(seriesId, playerIds);
         manOfTheSeriesRepository.deleteAll(manOfTheSeriesList);
+    }
+
+    public void remove(Long seriesId)
+    {
+        manOfTheSeriesRepository.deleteAll(getBySeriesIds(Collections.singletonList(seriesId)));
     }
 }
