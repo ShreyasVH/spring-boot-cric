@@ -37,4 +37,9 @@ public class MatchService {
     {
         return matchRepository.findById(id).orElse(null);
     }
+
+    public void remove(Integer id)
+    {
+        matchRepository.deleteById(id);
+    }
 }

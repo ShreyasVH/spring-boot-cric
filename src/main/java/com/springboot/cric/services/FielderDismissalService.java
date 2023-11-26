@@ -37,4 +37,9 @@ public class FielderDismissalService {
     {
         return fielderDismissalRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
     }
+
+    public void remove(List<Integer> matchPlayerIds)
+    {
+        fielderDismissalRepository.deleteAll(get(matchPlayerIds));
+    }
 }

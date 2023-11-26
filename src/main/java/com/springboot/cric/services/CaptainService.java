@@ -24,4 +24,9 @@ public class CaptainService {
     {
         return captainRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
     }
+
+    public void remove(List<Integer> matchPlayerIds)
+    {
+        captainRepository.deleteAll(getByMatchPlayerIds(matchPlayerIds));
+    }
 }

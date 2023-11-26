@@ -33,4 +33,9 @@ public class BowlingFigureService {
     {
         return bowlingFigureRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
     }
+
+    public void remove(List<Integer> matchPlayerIds)
+    {
+        bowlingFigureRepository.deleteAll(get(matchPlayerIds));
+    }
 }

@@ -24,4 +24,9 @@ public class WicketKeeperService {
     {
         return wicketKeeperRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
     }
+
+    public void remove(List<Integer> matchPlayerIds)
+    {
+        wicketKeeperRepository.deleteAll(getByMatchPlayerIds(matchPlayerIds));
+    }
 }
