@@ -25,4 +25,9 @@ public class ExtrasService {
     {
         return extrasRepository.findAllByMatchId(matchId);
     }
+
+    public void remove(Integer matchId)
+    {
+        extrasRepository.deleteAll(getByMatchId(matchId));
+    }
 }

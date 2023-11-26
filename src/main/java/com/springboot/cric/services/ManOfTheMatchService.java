@@ -24,4 +24,9 @@ public class ManOfTheMatchService {
     {
         return manOfTheMatchRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
     }
+
+    public void remove(List<Integer> matchPlayerIds)
+    {
+        manOfTheMatchRepository.deleteAll(getByMatchPlayerIds(matchPlayerIds));
+    }
 }

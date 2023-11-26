@@ -40,4 +40,9 @@ public class BattingScoreService {
     {
         return battingScoreRepository.findAllByMatchPlayerIdIn(matchPlayerIds);
     }
+
+    public void remove(List<Integer> matchPlayerIds)
+    {
+        battingScoreRepository.deleteAll(getBattingScores(matchPlayerIds));
+    }
 }
