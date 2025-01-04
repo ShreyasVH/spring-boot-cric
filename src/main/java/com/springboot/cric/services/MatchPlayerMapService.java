@@ -1,7 +1,9 @@
 package com.springboot.cric.services;
 
+import com.springboot.cric.models.ManOfTheSeries;
 import com.springboot.cric.models.MatchPlayerMap;
 import com.springboot.cric.repositories.MatchPlayerMapRepository;
+import com.springboot.cric.requests.players.MergeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +30,12 @@ public class MatchPlayerMapService {
     public void remove(Integer matchId)
     {
         matchPlayerMapRepository.deleteAll(getByMatchId(matchId));
+    }
+
+    public void merge(MergeRequest mergeRequest)
+    {
+        List<MatchPlayerMap> matchPlayerMaps = matchPlayerMapRepository.findAllByPlayerId(mergeRequest.getPlayerIdToMerge());
+        matchPlayerMaps.forEach(matchPlayerMap -> matchPlayerMap.setPlayerId(mergeRequest.getOriginalPlayerId()));
+        matchPlayerMapRepository.saveAll(matchPlayerMaps);
     }
 }

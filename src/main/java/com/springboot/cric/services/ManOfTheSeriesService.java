@@ -2,6 +2,7 @@ package com.springboot.cric.services;
 
 import com.springboot.cric.models.ManOfTheSeries;
 import com.springboot.cric.repositories.ManOfTheSeriesRepository;
+import com.springboot.cric.requests.players.MergeRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,5 +32,12 @@ public class ManOfTheSeriesService {
     public void remove(Long seriesId)
     {
         manOfTheSeriesRepository.deleteAll(getBySeriesIds(Collections.singletonList(seriesId)));
+    }
+
+    public void merge(MergeRequest mergeRequest)
+    {
+        List<ManOfTheSeries> manOfTheSeriesList = manOfTheSeriesRepository.findAllByPlayerId(mergeRequest.getPlayerIdToMerge());
+        manOfTheSeriesList.forEach(manOfTheSeries -> manOfTheSeries.setPlayerId(mergeRequest.getOriginalPlayerId()));
+        manOfTheSeriesRepository.saveAll(manOfTheSeriesList);
     }
 }

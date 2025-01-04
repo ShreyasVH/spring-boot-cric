@@ -1,5 +1,6 @@
 package com.springboot.cric.controllers;
 
+import com.springboot.cric.requests.players.MergeRequest;
 import com.springboot.cric.responses.*;
 
 import java.util.HashMap;
@@ -30,6 +31,10 @@ public class PlayerController {
     private BowlingFigureService bowlingFigureService;
     @Autowired
     private FielderDismissalService fielderDismissalService;
+    @Autowired
+    private ManOfTheSeriesService manOfTheSeriesService;
+    @Autowired
+    private MatchPlayerMapService matchPlayerMapService;
 
     @PostMapping("/cric/v1/players")
     public ResponseEntity<Response> create(@RequestBody CreateRequest request)
@@ -155,5 +160,27 @@ public class PlayerController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new Response(playerResponse));
+    }
+
+    @PostMapping("/cric/v1/players/merge")
+    public ResponseEntity<Response> merge(@RequestBody MergeRequest request)
+    {
+        Player player = playerService.getById(request.getPlayerIdToMerge());
+        if(null == player)
+        {
+            throw new NotFoundException("Player");
+        }
+
+        Player originalPlayer = playerService.getById(request.getOriginalPlayerId());
+        if(null == originalPlayer)
+        {
+            throw new NotFoundException("Original Player");
+        }
+
+        manOfTheSeriesService.merge(request);
+        matchPlayerMapService.merge(request);
+        playerService.remove(request.getPlayerIdToMerge());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Success"));
     }
 }
