@@ -48,4 +48,9 @@ public class PlayerService {
     {
         return playerRepository.findById(id).orElse(null);
     }
+
+    public void remove(Long id)
+    {
+        playerRepository.delete(getById(id));
+    }
 }
