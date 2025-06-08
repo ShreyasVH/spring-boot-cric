@@ -181,6 +181,23 @@ public class PlayerController {
         matchPlayerMapService.merge(request);
         playerService.remove(request.getPlayerIdToMerge());
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Success"));
+        return ResponseEntity.status(HttpStatus.OK).body(new Response("Success"));
+    }
+
+    @GetMapping("/cric/v1/players/search")
+    public ResponseEntity<Response> search(@RequestParam(name = "keyword") String keyword, @RequestParam(name = "page") int page, @RequestParam(name = "limit") int limit) {
+        List<Player> players = playerService.search(keyword, page, limit);
+        List<Long> countryIds = players.stream().map(Player::getCountryId).collect(Collectors.toList());
+        List<Country> countries = countryService.getByIds(countryIds);
+        Map<Long, Country> countryMap = countries.stream().collect(Collectors.toMap(Country::getId, country -> country));
+
+        List<PlayerMiniResponse> playerResponses = players.stream().map(player -> new PlayerMiniResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
+        long totalCount = 0L;
+        if(page == 1) {
+            totalCount = playerService.searchCount(keyword);
+        }
+
+        PaginatedResponse<PlayerMiniResponse> paginatedResponse = new PaginatedResponse<>(totalCount, playerResponses, page, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(new Response(paginatedResponse));
     }
 }

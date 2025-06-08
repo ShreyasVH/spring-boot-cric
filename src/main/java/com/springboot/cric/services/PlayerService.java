@@ -53,4 +53,16 @@ public class PlayerService {
     {
         playerRepository.delete(getById(id));
     }
+
+    public List<Player> search(String keyword, int page, int limit) {
+        Sort sort = Sort.by(Sort.Direction.fromString("asc"), "name");
+        PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
+        Page<Player> playersPage = playerRepository.findByNameContainingIgnoreCase(keyword, pageRequest);
+        return playersPage.getContent();
+    }
+
+    public long searchCount(String keyword)
+    {
+        return playerRepository.countByNameContainingIgnoreCase(keyword);
+    }
 }
