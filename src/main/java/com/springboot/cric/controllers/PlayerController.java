@@ -36,6 +36,15 @@ public class PlayerController {
     @Autowired
     private MatchPlayerMapService matchPlayerMapService;
 
+    private List<PlayerMiniResponse> getPlayerResponses(List<Player> players)
+    {
+        List<Long> countryIds = players.stream().map(Player::getCountryId).collect(Collectors.toList());
+        List<Country> countries = countryService.getByIds(countryIds);
+        Map<Long, Country> countryMap = countries.stream().collect(Collectors.toMap(Country::getId, country -> country));
+
+        return players.stream().map(player -> new PlayerMiniResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
+    }
+
     @PostMapping("/cric/v1/players")
     public ResponseEntity<Response> create(@RequestBody CreateRequest request)
     {
@@ -52,16 +61,12 @@ public class PlayerController {
     @GetMapping("/cric/v1/players")
     public ResponseEntity<Response> getAll(@RequestParam(name = "page") int page, @RequestParam(name = "limit") int limit) {
         List<Player> players = playerService.getAll(page, limit);
-        List<Long> countryIds = players.stream().map(Player::getCountryId).collect(Collectors.toList());
-        List<Country> countries = countryService.getByIds(countryIds);
-        Map<Long, Country> countryMap = countries.stream().collect(Collectors.toMap(Country::getId, country -> country));
-
-        List<PlayerMiniResponse> playerResponses = players.stream().map(player -> new PlayerMiniResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
         long totalCount = 0L;
         if(page == 1) {
             totalCount = playerService.getTotalCount();
         }
 
+        List<PlayerMiniResponse> playerResponses = getPlayerResponses(players);
         PaginatedResponse<PlayerMiniResponse> paginatedResponse = new PaginatedResponse<>(totalCount, playerResponses, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(new Response(paginatedResponse));
     }
@@ -187,16 +192,13 @@ public class PlayerController {
     @GetMapping("/cric/v1/players/search")
     public ResponseEntity<Response> search(@RequestParam(name = "keyword") String keyword, @RequestParam(name = "page") int page, @RequestParam(name = "limit") int limit) {
         List<Player> players = playerService.search(keyword, page, limit);
-        List<Long> countryIds = players.stream().map(Player::getCountryId).collect(Collectors.toList());
-        List<Country> countries = countryService.getByIds(countryIds);
-        Map<Long, Country> countryMap = countries.stream().collect(Collectors.toMap(Country::getId, country -> country));
 
-        List<PlayerMiniResponse> playerResponses = players.stream().map(player -> new PlayerMiniResponse(player, new CountryResponse(countryMap.get(player.getCountryId())))).collect(Collectors.toList());
         long totalCount = 0L;
         if(page == 1) {
             totalCount = playerService.searchCount(keyword);
         }
 
+        List<PlayerMiniResponse> playerResponses = getPlayerResponses(players);
         PaginatedResponse<PlayerMiniResponse> paginatedResponse = new PaginatedResponse<>(totalCount, playerResponses, page, limit);
         return ResponseEntity.status(HttpStatus.OK).body(new Response(paginatedResponse));
     }
