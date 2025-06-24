@@ -66,6 +66,21 @@ public class SeriesController {
         }
 
         countryIds.add(createRequest.getHomeCountryId());
+
+        List<Player> players = new ArrayList<>();
+        List<Long> manOfTheSeriesToAdd = new ArrayList<>();
+        if (null != createRequest.getManOfTheSeriesList()) {
+            players = playerService.getByIds(createRequest.getManOfTheSeriesList());
+            if(players.size() != createRequest.getManOfTheSeriesList().stream().distinct().count()) {
+                throw new NotFoundException("Player");
+            }
+
+            manOfTheSeriesToAdd = createRequest.getManOfTheSeriesList();
+        }
+
+        List<Long> playerCountryIds = players.stream().map(Player::getCountryId).collect(Collectors.toList());
+        countryIds.addAll(playerCountryIds);
+
         List<Country> countries = countryService.getByIds(countryIds);
         Map<Long, Country> countryMap = countries.stream().collect(Collectors.toMap(Country::getId, country -> country));
 
@@ -91,6 +106,7 @@ public class SeriesController {
 
         Series series = seriesService.create(createRequest);
         seriesTeamsMapService.create(series.getId(), createRequest.getTeams());
+        manOfTheSeriesService.add(series.getId(), manOfTheSeriesToAdd);
 
         List<TeamType> teamTypes = teamTypeService.getByIds(teamTypeIds);
         Map<Integer, TeamType> teamTypeMap = teamTypes.stream().collect(Collectors.toMap(TeamType::getId, teamType -> teamType));
