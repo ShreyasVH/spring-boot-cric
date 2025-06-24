@@ -20,7 +20,7 @@ public class StadiumService {
     public Stadium create(CreateRequest createRequest) {
         createRequest.validate();
 
-        Stadium existingStadium = stadiumRepository.findByNameAndCountryId(createRequest.getName(), createRequest.getCountryId());
+        Stadium existingStadium = stadiumRepository.findByNameAndCountryIdAndCity(createRequest.getName(), createRequest.getCountryId(), createRequest.getCity());
         if(null != existingStadium) {
             throw new ConflictException("Stadium");
         }
