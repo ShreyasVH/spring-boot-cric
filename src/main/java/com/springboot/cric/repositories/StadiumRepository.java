@@ -7,5 +7,5 @@ import com.springboot.cric.models.Stadium;
 
 @Repository
 public interface StadiumRepository extends JpaRepository<Stadium, Long> {
-    Stadium findByNameAndCountryId(String name, Long countryId);
+    Stadium findByNameAndCountryIdAndCity(String name, Long countryId, String city);
 }
