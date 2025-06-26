@@ -1,0 +1,1 @@
+CREATE INDEX match_player_map_player_id_match_id_team_id_index ON match_player_map USING btree (player_id, match_id, team_id);
