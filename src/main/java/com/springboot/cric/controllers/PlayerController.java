@@ -1,5 +1,6 @@
 package com.springboot.cric.controllers;
 
+import com.springboot.cric.exceptions.BadRequestException;
 import com.springboot.cric.requests.players.MergeRequest;
 import com.springboot.cric.responses.*;
 
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 import com.springboot.cric.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -167,9 +169,15 @@ public class PlayerController {
         return ResponseEntity.status(HttpStatus.OK).body(new Response(playerResponse));
     }
 
+    @Transactional
     @PostMapping("/cric/v1/players/merge")
     public ResponseEntity<Response> merge(@RequestBody MergeRequest request)
     {
+        if(request.getOriginalPlayerId().equals(request.getPlayerIdToMerge()))
+        {
+            throw new BadRequestException("Same player given");
+        }
+
         Player player = playerService.getById(request.getPlayerIdToMerge());
         if(null == player)
         {
