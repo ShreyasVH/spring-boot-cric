@@ -23,11 +23,14 @@ import com.springboot.cric.responses.Response;
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Response> handleAllExceptions(Exception ex, WebRequest request, InputStream inputStream) throws IOException {
+        System.out.println(ex.getMessage());
+//        System.out.println(request.);
         return handleException("Internal Server Error occurred", 500);
     }
 
     @ExceptionHandler(MyException.class)
     public final ResponseEntity<Response> handleNotFoundExceptions(MyException ex, WebRequest request) {
+        System.out.println(ex.getMessage());
         return handleException(ex.getDescription(), ex.getHttpStatusCode());
     }
 
