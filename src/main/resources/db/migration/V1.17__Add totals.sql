@@ -11,3 +11,5 @@ CREATE TABLE totals (
   CONSTRAINT fk_t_match FOREIGN KEY (match_id) REFERENCES matches (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT fk_t_team FOREIGN KEY (team_id) REFERENCES teams (id) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
+
+CREATE INDEX idx_totals_team_id ON totals (team_id);
