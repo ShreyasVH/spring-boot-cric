@@ -58,6 +58,8 @@ public class MatchController {
     private WicketKeeperService wicketKeeperService;
     @Autowired
     private GameTypeService gameTypeService;
+    @Autowired
+    private TotalsService totalsService;
 
     @Transactional
     @PostMapping("/cric/v1/matches")
@@ -234,6 +236,7 @@ public class MatchController {
         manOfTheMatchService.add(createRequest.getManOfTheMatchList(), playerToMatchPlayerMap);
         captainService.add(createRequest.getCaptains(), playerToMatchPlayerMap);
         wicketKeeperService.add(createRequest.getWicketKeepers(), playerToMatchPlayerMap);
+        totalsService.add(createRequest.getTotals().stream().map(total -> new Total(match.getId(), total)).collect(Collectors.toList()));
 
         Map<Long, List<PlayerMiniResponse>> teamPlayerMap = new HashMap<>();
         for(Player player: allPlayers)
