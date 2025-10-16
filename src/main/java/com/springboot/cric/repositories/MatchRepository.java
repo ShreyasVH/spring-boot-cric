@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface MatchRepository extends JpaRepository<Match, Integer> {
     Match findByStadiumIdAndStartTime(Long stadiumId, LocalDateTime startTime);
-    List<Match> findAllBySeriesIdOrderByStartTime(Long seriesId);
+    List<Match> findAllBySeriesIdOrderByStartTime(Integer seriesId);
 }

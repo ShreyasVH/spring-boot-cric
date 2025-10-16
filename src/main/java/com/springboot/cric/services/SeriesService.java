@@ -1,7 +1,6 @@
 package com.springboot.cric.services;
 
 import com.springboot.cric.exceptions.ConflictException;
-import com.springboot.cric.models.Player;
 import com.springboot.cric.models.Series;
 import com.springboot.cric.repositories.SeriesRepository;
 import com.springboot.cric.requests.series.CreateRequest;
@@ -42,7 +41,7 @@ public class SeriesService {
         return seriesRepository.count();
     }
 
-    public Series getById(Long id) {
+    public Series getById(Integer id) {
         return seriesRepository.getOne(id);
     }
 
@@ -90,7 +89,7 @@ public class SeriesService {
         return seriesRepository.findAllByTourIdOrderByStartTimeDesc(tourId);
     }
 
-    public void remove(Long id)
+    public void remove(Integer id)
     {
         seriesRepository.deleteById(id);
     }

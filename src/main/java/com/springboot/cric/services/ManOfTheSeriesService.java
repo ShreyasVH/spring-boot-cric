@@ -15,21 +15,21 @@ public class ManOfTheSeriesService {
     @Autowired
     private ManOfTheSeriesRepository manOfTheSeriesRepository;
 
-    public List<ManOfTheSeries> getBySeriesIds(List<Long> seriesIds) {
+    public List<ManOfTheSeries> getBySeriesIds(List<Integer> seriesIds) {
         return manOfTheSeriesRepository.findAllBySeriesIdIn(seriesIds);
     }
 
-    public void add(Long seriesId, List<Long> playerIds) {
+    public void add(Integer seriesId, List<Long> playerIds) {
         List<ManOfTheSeries> manOfTheSeriesList = playerIds.stream().map(playerId -> new ManOfTheSeries(null, seriesId, playerId)).collect(Collectors.toList());
         manOfTheSeriesRepository.saveAll(manOfTheSeriesList);
     }
 
-    public void delete(Long seriesId, List<Long> playerIds) {
+    public void delete(Integer seriesId, List<Long> playerIds) {
         List<ManOfTheSeries> manOfTheSeriesList = manOfTheSeriesRepository.findAllBySeriesIdAndPlayerIdIn(seriesId, playerIds);
         manOfTheSeriesRepository.deleteAll(manOfTheSeriesList);
     }
 
-    public void remove(Long seriesId)
+    public void remove(Integer seriesId)
     {
         manOfTheSeriesRepository.deleteAll(getBySeriesIds(Collections.singletonList(seriesId)));
     }

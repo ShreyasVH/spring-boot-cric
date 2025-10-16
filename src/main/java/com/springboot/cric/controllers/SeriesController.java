@@ -1,5 +1,6 @@
 package com.springboot.cric.controllers;
 
+import com.springboot.cric.enums.TagEntityType;
 import com.springboot.cric.exceptions.ConflictException;
 import com.springboot.cric.models.*;
 import com.springboot.cric.requests.series.UpdateRequest;
@@ -48,6 +49,8 @@ public class SeriesController {
     private WinMarginTypeService winMarginTypeService;
     @Autowired
     private StadiumService stadiumService;
+    @Autowired
+    private TagMapService tagMapService;
 
     @PostMapping("/cric/v1/series")
     @Transactional
@@ -107,6 +110,7 @@ public class SeriesController {
         Series series = seriesService.create(createRequest);
         seriesTeamsMapService.create(series.getId(), createRequest.getTeams());
         manOfTheSeriesService.add(series.getId(), manOfTheSeriesToAdd);
+        tagMapService.create(series.getId(), createRequest.getTags(), TagEntityType.SERIES.name());
 
         List<TeamType> teamTypes = teamTypeService.getByIds(teamTypeIds);
         Map<Integer, TeamType> teamTypeMap = teamTypes.stream().collect(Collectors.toMap(TeamType::getId, teamType -> teamType));
@@ -128,7 +132,7 @@ public class SeriesController {
         List<Integer> seriesTypeIds = new ArrayList<>();
         List<Integer> gameTypeIds = new ArrayList<>();
         List<Long> tourIds = new ArrayList<>();
-        List<Long> seriesIds = new ArrayList<>();
+        List<Integer> seriesIds = new ArrayList<>();
 
         for (Series series: seriesList) {
             countryIds.add(series.getHomeCountryId());
@@ -182,7 +186,7 @@ public class SeriesController {
 
     @PutMapping("/cric/v1/series/{id}")
     @Transactional
-    public ResponseEntity<Response> update(@PathVariable Long id, @RequestBody UpdateRequest updateRequest) {
+    public ResponseEntity<Response> update(@PathVariable Integer id, @RequestBody UpdateRequest updateRequest) {
         Series existingSeries = seriesService.getById(id);
         if (null == existingSeries) {
             throw new NotFoundException("Series");
@@ -311,7 +315,7 @@ public class SeriesController {
     }
 
     @GetMapping("/cric/v1/series/{id}")
-    public ResponseEntity<Response> getById(@PathVariable Long id)
+    public ResponseEntity<Response> getById(@PathVariable Integer id)
     {
         Series series = seriesService.getById(id);
         if(null == series)
@@ -390,7 +394,7 @@ public class SeriesController {
 
     @Transactional
     @DeleteMapping("/cric/v1/series/{id}")
-    public ResponseEntity<Response> remove(@PathVariable Long id) {
+    public ResponseEntity<Response> remove(@PathVariable Integer id) {
         Series series = seriesService.getById(id);
         if (null == series) {
             throw new NotFoundException("Series");

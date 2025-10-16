@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface SeriesRepository extends JpaRepository<Series, Long> {
+public interface SeriesRepository extends JpaRepository<Series, Integer> {
     Series findByNameAndTourIdAndGameTypeId(String name, Long tourId, Integer gameTypeId);
     List<Series> findAllByTourIdOrderByStartTimeDesc(Long tourId);
 }

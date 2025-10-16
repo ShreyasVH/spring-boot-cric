@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class SeriesDetailedResponse
 {
-    private Long id;
+    private Integer id;
     private String name;
     private SeriesTypeResponse type;
     private GameTypeResponse gameType;
