@@ -26,8 +26,9 @@ public class SeriesDetailedResponse
     private LocalDateTime startTime;
     private List<TeamResponse> teams;
     private List<MatchMiniResponse> matches;
+    private List<Tag> tags;
 
-    public SeriesDetailedResponse(Series series, SeriesType seriesType, GameType gameType, List<TeamResponse> teams, List<MatchMiniResponse> matches)
+    public SeriesDetailedResponse(Series series, SeriesType seriesType, GameType gameType, List<TeamResponse> teams, List<MatchMiniResponse> matches, List<Tag> tags)
     {
         this.id = series.getId();
         this.name = series.getName();
@@ -36,5 +37,6 @@ public class SeriesDetailedResponse
         this.startTime = series.getStartTime();
         this.teams = teams;
         this.matches = matches;
+        this.tags = tags;
     }
 }

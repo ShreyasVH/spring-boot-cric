@@ -25,4 +25,8 @@ public class TagsService {
     public long getTotalCount() {
         return tagsRepository.count();
     }
+
+    public List<Tag> getByIds(List<Integer> ids) {
+        return tagsRepository.findByIdIn(ids);
+    }
 }

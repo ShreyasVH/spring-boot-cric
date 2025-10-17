@@ -17,4 +17,8 @@ public class TagMapService {
         List<TagMap> tagMaps = tagIds.stream().map(tagId -> new TagMap(null, tagEntityType, entityId, tagId)).collect(Collectors.toList());
         tagMapRepository.saveAll(tagMaps);
     }
+
+    public List<TagMap> get(String tagEntityType, Integer entityId) {
+        return tagMapRepository.findAllByEntityTypeAndEntityId(tagEntityType, entityId);
+    }
 }

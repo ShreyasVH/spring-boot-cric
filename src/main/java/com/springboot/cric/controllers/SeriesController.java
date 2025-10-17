@@ -51,6 +51,8 @@ public class SeriesController {
     private StadiumService stadiumService;
     @Autowired
     private TagMapService tagMapService;
+    @Autowired
+    private TagsService tagsService;
 
     @PostMapping("/cric/v1/series")
     @Transactional
@@ -387,7 +389,11 @@ public class SeriesController {
             );
         }).collect(Collectors.toList());
 
-        SeriesDetailedResponse seriesResponse = new SeriesDetailedResponse(series, seriesType, gameType, teamResponses, matchMiniResponses);
+        List<TagMap> tagMaps = tagMapService.get(TagEntityType.SERIES.name(), id);
+        List<Integer> tagIds = tagMaps.stream().map(TagMap::getTagId).collect(Collectors.toList());
+        List<Tag> tags = tagsService.getByIds(tagIds);
+
+        SeriesDetailedResponse seriesResponse = new SeriesDetailedResponse(series, seriesType, gameType, teamResponses, matchMiniResponses, tags);
 
         return ResponseEntity.status(HttpStatus.OK).body(new Response(seriesResponse));
     }
