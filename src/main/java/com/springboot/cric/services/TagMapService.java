@@ -21,4 +21,9 @@ public class TagMapService {
     public List<TagMap> get(String tagEntityType, Integer entityId) {
         return tagMapRepository.findAllByEntityTypeAndEntityId(tagEntityType, entityId);
     }
+
+    public void remove(String entityType, Integer entityId)
+    {
+        tagMapRepository.deleteAll(get(entityType, entityId));
+    }
 }

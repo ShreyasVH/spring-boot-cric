@@ -42,7 +42,7 @@ public class SeriesService {
     }
 
     public Series getById(Integer id) {
-        return seriesRepository.getOne(id);
+        return seriesRepository.findById(id).orElse(null);
     }
 
     public Series update(Series existingSeries, UpdateRequest updateRequest) {

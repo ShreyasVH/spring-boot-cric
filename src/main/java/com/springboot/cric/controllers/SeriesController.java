@@ -415,6 +415,7 @@ public class SeriesController {
         manOfTheSeriesService.remove(id);
         seriesTeamsMapService.remove(id);
         seriesService.remove(id);
+        tagMapService.remove(TagEntityType.SERIES.name(), id);
 
         return ResponseEntity.status(HttpStatus.OK).body(new Response("Deleted successfully", true));
     }
