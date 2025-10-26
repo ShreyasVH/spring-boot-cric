@@ -479,6 +479,7 @@ public class MatchController {
         battingScoreService.remove(matchPlayerIds);
         bowlingFigureService.remove(matchPlayerIds);
         matchPlayerMapService.remove(id);
+        totalsService.remove(id);
         matchService.remove(id);
 
         return ResponseEntity.ok(new Response("Deleted successfully"));
