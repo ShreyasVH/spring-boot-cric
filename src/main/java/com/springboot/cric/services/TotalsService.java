@@ -16,4 +16,14 @@ public class TotalsService {
     {
         totalsRepository.saveAll(totals);
     }
+
+    public List<Total> getByMatchId(Integer matchId)
+    {
+        return totalsRepository.findAllByMatchId(matchId);
+    }
+
+    public void remove(Integer matchId)
+    {
+        totalsRepository.deleteAll(getByMatchId(matchId));
+    }
 }
