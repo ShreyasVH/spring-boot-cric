@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 public class Series {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String name;
     private Long homeCountryId;
     private Long tourId;

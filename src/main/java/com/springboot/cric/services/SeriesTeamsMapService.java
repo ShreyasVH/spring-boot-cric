@@ -14,21 +14,21 @@ public class SeriesTeamsMapService {
     @Autowired
     private SeriesTeamsMapRepository seriesTeamsMapRepository;
 
-    public void create(Long seriesId, List<Long> teamIds) {
+    public void create(Integer seriesId, List<Long> teamIds) {
         List<SeriesTeamsMap> seriesTeamsMaps = teamIds.stream().map(teamId -> new SeriesTeamsMap(null, seriesId, teamId)).collect(Collectors.toList());
         seriesTeamsMapRepository.saveAll(seriesTeamsMaps);
     }
 
-    public List<SeriesTeamsMap> getBySeriesIds(List<Long> seriesIds) {
+    public List<SeriesTeamsMap> getBySeriesIds(List<Integer> seriesIds) {
         return seriesTeamsMapRepository.findAllBySeriesIdIn(seriesIds);
     }
 
-    public void delete(Long seriesId, List<Long> teamIds) {
+    public void delete(Integer seriesId, List<Long> teamIds) {
         List<SeriesTeamsMap> seriesTeamsMaps = seriesTeamsMapRepository.findAllBySeriesIdAndTeamIdIn(seriesId, teamIds);
         seriesTeamsMapRepository.deleteAll(seriesTeamsMaps);
     }
 
-    public void remove(Long seriesId)
+    public void remove(Integer seriesId)
     {
         seriesTeamsMapRepository.deleteAll(getBySeriesIds(Collections.singletonList(seriesId)));
     }

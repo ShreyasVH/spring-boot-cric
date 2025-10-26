@@ -28,7 +28,7 @@ public class MatchService {
         return matchRepository.save(match);
     }
 
-    public List<Match> getBySeriesId(Long seriesId)
+    public List<Match> getBySeriesId(Integer seriesId)
     {
         return matchRepository.findAllBySeriesIdOrderByStartTime(seriesId);
     }
