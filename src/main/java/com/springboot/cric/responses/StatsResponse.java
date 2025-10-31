@@ -10,6 +10,6 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 public class StatsResponse {
-    private Integer count = 0;
+    private Long count = 0L;
     private List<Map<String, String>> stats = new ArrayList<>();
 }
