@@ -89,7 +89,7 @@ public class PlayerCustomRepository extends BaseCustomRepository {
                 fieldName = "t.id";
                 break;
             case "opposingTeam":
-                fieldName = "IF(t.id = m.team_1_id, m.team_2_id, m.team_1_id)";
+                fieldName = "(CASE WHEN t.id = m.team_1_id THEN m.team_2_id ELSE m.team_1_id END)";
                 break;
             case "teamType":
                 fieldName = "t.type_id";
@@ -101,7 +101,7 @@ public class PlayerCustomRepository extends BaseCustomRepository {
                 fieldName = "s.id";
                 break;
             case "year":
-                fieldName = "YEAR(m.start_time)";
+                fieldName = "EXTRACT(YEAR FROM m.start_time)";
                 break;
             case "playerName":
                 fieldName = "p.name";
