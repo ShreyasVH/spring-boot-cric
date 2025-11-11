@@ -20,7 +20,7 @@ public class StatsService {
         }
         else if("bowling".equals(filterRequest.getType()))
         {
-//            statsResponse = this.playerRepository.getBowlingStats(filterRequest);
+            statsResponse = playerCustomRepository.getBowlingStats(filterRequest);
         }
         else if("fielding".equals(filterRequest.getType()))
         {

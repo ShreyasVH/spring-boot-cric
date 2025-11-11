@@ -217,4 +217,106 @@ public class PlayerCustomRepository extends BaseCustomRepository {
 
         return statsResponse;
     }
+
+    public StatsResponse getBowlingStats(FilterRequest filterRequest) {
+        StatsResponse statsResponse = new StatsResponse();
+        List<Map<String, String>> statList = new ArrayList<>();
+        String query = "select p.id as playerId, p.name AS name, sum(bf.wickets) AS wickets, sum(bf.runs) as runs, count(0) AS innings, sum(bf.balls) AS balls, sum(bf.maidens) AS maidens, count((case when ((bf.wickets >= 5) and (bf.wickets < 10)) then 1 end)) AS fifers, count((case when ((bf.wickets = 10)) then 1 end)) AS tenWickets from bowling_figures bf " +
+                "inner join match_player_map mpm on mpm.id = bf.match_player_id " +
+                "inner join players p on p.id = mpm.player_id " +
+                "inner join matches m on m.id = mpm.match_id " +
+                "inner join series s on s.id = m.series_id " +
+                "inner join stadiums st on st.id = m.stadium_id " +
+                "inner join teams t on t.id = mpm.team_id";
+
+        String countQuery = "select count(distinct p.id) as count from bowling_figures bf " +
+                "inner join match_player_map mpm on mpm.id = bf.match_player_id " +
+                "inner join players p on p.id = mpm.player_id " +
+                "inner join matches m on m.id = mpm.match_id " +
+                "inner join series s on s.id = m.series_id " +
+                "inner join stadiums st on st.id = m.stadium_id " +
+                "inner join teams t on t.id = mpm.team_id";
+
+        //where
+        List<String> whereQueryParts = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : filterRequest.getFilters().entrySet()) {
+            String field = entry.getKey();
+            List<String> valueList = entry.getValue();
+
+            String fieldNameWithTablePrefix = getFieldNameWithTablePrefix(field);
+            if (!fieldNameWithTablePrefix.isEmpty() && !valueList.isEmpty()) {
+                whereQueryParts.add(fieldNameWithTablePrefix + " in (" + String.join(", ", valueList) + ")");
+            }
+        }
+
+        for (Map.Entry<String, Map<String, String>> entry : filterRequest.getRangeFilters().entrySet()) {
+            String field = entry.getKey();
+            Map<String, String> rangeValues = entry.getValue();
+
+            String fieldNameWithTablePrefix = getFieldNameWithTablePrefix(field);
+            if (!fieldNameWithTablePrefix.isEmpty() && !rangeValues.isEmpty()) {
+                if (rangeValues.containsKey("from")) {
+                    whereQueryParts.add(fieldNameWithTablePrefix + " >= " + rangeValues.get("from"));
+                }
+                if (rangeValues.containsKey("to")) {
+                    whereQueryParts.add(fieldNameWithTablePrefix + " <= " + rangeValues.get("to"));
+                }
+
+            }
+        }
+
+        if (!whereQueryParts.isEmpty()) {
+            query += " where " + String.join(" and ", whereQueryParts);
+            countQuery += " where " + String.join(" and ", whereQueryParts);
+        }
+
+        query += " group by playerId";
+
+        //sort
+        List<String> sortList = new ArrayList<>();
+        for (Map.Entry<String, String> entry : filterRequest.getSortMap().entrySet()) {
+            String field = entry.getKey();
+            String value = entry.getValue();
+
+            String sortFieldName = getFieldNameForDisplay(field);
+            if (!sortFieldName.isEmpty()) {
+                sortList.add(sortFieldName + " " + value);
+            }
+        }
+        if (sortList.isEmpty()) {
+            sortList.add(getFieldNameForDisplay("wickets") + " desc");
+        }
+        query += " order by " + String.join(", ", sortList);
+
+        //offset limit
+        query += " limit " + Integer.min(30, filterRequest.getCount()) + " offset " + filterRequest.getOffset();
+
+        List<Map<String, Object>> countResult = executeRawQuery(countQuery);
+        statsResponse.setCount(Long.parseLong(countResult.get(0).get("count").toString()));
+
+        List<Map<String, Object>> result = executeRawQuery(query);
+        for(Map<String, Object> row: result)
+        {
+            long innings = Long.parseLong(row.get("innings").toString());
+            if (innings > 0L) {
+                Map<String, String> stats = new HashMap<>();
+
+                stats.put("id", row.get("playerid").toString());
+                stats.put("name", row.get("name").toString());
+                stats.put("innings", String.valueOf(innings));
+                stats.put("wickets", row.get("wickets").toString());
+                stats.put("runs", row.get("runs").toString());
+                stats.put("balls", row.get("balls").toString());
+                stats.put("maidens", row.get("maidens").toString());
+                stats.put("fifers", row.get("fifers").toString());
+                stats.put("tenWickets", row.get("tenwickets").toString());
+
+                statList.add(stats);
+            }
+        }
+
+        statsResponse.setStats(statList);
+
+        return statsResponse;
+    }
 }
