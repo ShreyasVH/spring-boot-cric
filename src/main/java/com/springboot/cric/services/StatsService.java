@@ -24,7 +24,7 @@ public class StatsService {
         }
         else if("fielding".equals(filterRequest.getType()))
         {
-//            statsResponse = this.playerRepository.getFieldingStats(filterRequest);
+            statsResponse = playerCustomRepository.getFieldingStats(filterRequest);
         }
         return statsResponse;
     }
