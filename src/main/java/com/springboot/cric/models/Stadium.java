@@ -2,7 +2,7 @@ package com.springboot.cric.models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 import com.springboot.cric.requests.stadiums.CreateRequest;
 
