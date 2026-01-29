@@ -1,5 +1,6 @@
 package com.springboot.cric.controllers;
 
+import com.springboot.cric.enums.TagEntityType;
 import com.springboot.cric.exceptions.NotFoundException;
 import com.springboot.cric.models.*;
 import com.springboot.cric.requests.matches.PlayerRequest;
@@ -60,6 +61,10 @@ public class MatchController {
     private GameTypeService gameTypeService;
     @Autowired
     private TotalsService totalsService;
+    @Autowired
+    private TagMapService tagMapService;
+    @Autowired
+    private TagsService tagsService;
 
     @Transactional
     @PostMapping("/cric/v1/matches")
@@ -149,6 +154,8 @@ public class MatchController {
         List<Country> countries = countryService.getByIds(countryIds);
         Map<Long, Country> countryMap = countries.stream().collect(Collectors.toMap(Country::getId, country -> country));
 
+        List<Tag> tags = tagsService.getByIds(createRequest.getTags());
+
         List<BattingScoreResponse> battingScoreResponses = new ArrayList<>();
         List<BowlingFigureResponse> bowlingFigureResponses = new ArrayList<>();
         List<ExtrasResponse> extrasResponses = new ArrayList<>();
@@ -237,6 +244,7 @@ public class MatchController {
         captainService.add(createRequest.getCaptains(), playerToMatchPlayerMap);
         wicketKeeperService.add(createRequest.getWicketKeepers(), playerToMatchPlayerMap);
         totalsService.add(createRequest.getTotals().stream().map(total -> new Total(match.getId(), total)).collect(Collectors.toList()));
+        tagMapService.create(match.getId(), createRequest.getTags(), TagEntityType.MATCH.name());
 
         Map<Long, List<PlayerMiniResponse>> teamPlayerMap = new HashMap<>();
         for(Player player: allPlayers)
@@ -265,7 +273,8 @@ public class MatchController {
                 extrasResponses,
                 createRequest.getManOfTheMatchList(),
                 createRequest.getCaptains(),
-                createRequest.getWicketKeepers()
+                createRequest.getWicketKeepers(),
+                tags
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new Response(matchResponse));
@@ -384,6 +393,10 @@ public class MatchController {
         List<FielderDismissal> fielderDismissals = fielderDismissalService.get(matchPlayerIds);
         Map<Integer, List<FielderDismissal>> fielderDismissalMap = fielderDismissals.stream().collect(Collectors.groupingBy(FielderDismissal::getScoreId, Collectors.mapping(fielderDismissal -> fielderDismissal, Collectors.toList())));
 
+        List<TagMap> tagMaps = tagMapService.get(TagEntityType.MATCH.name(), id);
+        List<Integer> tagIds = tagMaps.stream().map(TagMap::getTagId).collect(Collectors.toList());
+        List<Tag> tags = tagsService.getByIds(tagIds);
+
         List<BattingScoreResponse> battingScoreResponses = new ArrayList<>();
         for(BattingScore battingScore: battingScores)
         {
@@ -453,7 +466,8 @@ public class MatchController {
                 extrasResponses,
                 manOfTheMatchList.stream().map(motm -> matchPlayerToPlayerMap.get(motm.getMatchPlayerId())).collect(Collectors.toList()),
                 captains.stream().map(captain -> matchPlayerToPlayerMap.get(captain.getMatchPlayerId())).collect(Collectors.toList()),
-                wicketKeepers.stream().map(wicketKeeper -> matchPlayerToPlayerMap.get(wicketKeeper.getMatchPlayerId())).collect(Collectors.toList())
+                wicketKeepers.stream().map(wicketKeeper -> matchPlayerToPlayerMap.get(wicketKeeper.getMatchPlayerId())).collect(Collectors.toList()),
+                tags
         );
 
         return ResponseEntity.status(HttpStatus.OK).body(new Response(matchResponse));
@@ -471,6 +485,7 @@ public class MatchController {
 
         List<MatchPlayerMap> matchPlayerMaps = matchPlayerMapService.getByMatchId(id);
         List<Integer> matchPlayerIds = matchPlayerMaps.stream().map(MatchPlayerMap::getId).collect(Collectors.toList());
+        tagMapService.remove(TagEntityType.MATCH.name(), id);
         extrasService.remove(id);
         captainService.remove(matchPlayerIds);
         wicketKeeperService.remove(matchPlayerIds);
