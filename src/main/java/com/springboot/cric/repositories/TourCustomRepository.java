@@ -11,11 +11,11 @@ public class TourCustomRepository extends BaseCustomRepository {
     public List<Integer> getAllYears() {
         List<Integer> years = new ArrayList<>();
 
-        String query = "SELECT DISTINCT EXTRACT(YEAR FROM start_time) AS year FROM tours ORDER BY year DESC";
+        String query = "SELECT DISTINCT EXTRACT(YEAR FROM start_time) AS tour_year FROM tours ORDER BY tour_year DESC";
         List<Map<String, Object>> result = executeRawQuery(query);
 
         for (Map<String, Object> row: result) {
-            years.add(Integer.parseInt(row.get("year").toString()));
+            years.add(Integer.parseInt(row.get("TOUR_YEAR").toString()));
         }
 
         return years;
