@@ -1,1 +1,0 @@
-INSERT INTO result_types (name) VALUES ('Least Wickets'), ('Boundary Count');
