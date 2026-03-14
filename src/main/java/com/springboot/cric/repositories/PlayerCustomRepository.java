@@ -163,7 +163,7 @@ public class PlayerCustomRepository extends BaseCustomRepository {
             countQuery += " where " + String.join(" and ", whereQueryParts);
         }
 
-        query += " group by playerId";
+        query += " group by p.id, p.name";
 
         //sort
         List<String> sortList = new ArrayList<>();
@@ -182,29 +182,29 @@ public class PlayerCustomRepository extends BaseCustomRepository {
         query += " order by " + String.join(", ", sortList);
 
         //offset limit
-        query += " limit " + Integer.min(30, filterRequest.getCount()) + " offset " + filterRequest.getOffset();
+        query += " offset " + Integer.min(30, filterRequest.getOffset()) + " rows fetch next " + filterRequest.getCount() + " rows only";
 
         List<Map<String, Object>> countResult = executeRawQuery(countQuery);
-        statsResponse.setCount(Long.parseLong(countResult.get(0).get("count").toString()));
+        statsResponse.setCount(Long.parseLong(countResult.get(0).get("count".toUpperCase()).toString()));
 
         List<Map<String, Object>> result = executeRawQuery(query);
         for(Map<String, Object> row: result)
         {
-            long innings = Long.parseLong(row.get("innings").toString());
+            long innings = Long.parseLong(row.get("innings".toUpperCase()).toString());
             if (innings > 0L) {
                 Map<String, String> stats = new HashMap<>();
 
-                stats.put("id", row.get("playerid").toString());
-                stats.put("name", row.get("name").toString());
+                stats.put("id", row.get("playerid".toUpperCase()).toString());
+                stats.put("name", row.get("name".toUpperCase()).toString());
                 stats.put("innings", String.valueOf(innings));
-                stats.put("runs", row.get("runs").toString());
-                stats.put("balls", row.get("balls").toString());
-                stats.put("notOuts", row.get("notouts").toString());
-                stats.put("fours", row.get("fours").toString());
-                stats.put("sixes", row.get("sixes").toString());
-                stats.put("highest", row.get("highest").toString());
-                stats.put("fifties", row.get("fifties").toString());
-                stats.put("hundreds", row.get("hundreds").toString());
+                stats.put("runs", row.get("runs".toUpperCase()).toString());
+                stats.put("balls", row.get("balls".toUpperCase()).toString());
+                stats.put("notOuts", row.get("notouts".toUpperCase()).toString());
+                stats.put("fours", row.get("fours".toUpperCase()).toString());
+                stats.put("sixes", row.get("sixes".toUpperCase()).toString());
+                stats.put("highest", row.get("highest".toUpperCase()).toString());
+                stats.put("fifties", row.get("fifties".toUpperCase()).toString());
+                stats.put("hundreds", row.get("hundreds".toUpperCase()).toString());
 //                stats.put("twoHundreds", row.get("twoHundreds").toString());
 //                stats.put("threeHundreds", row.get("threeHundreds").toString());
 //                stats.put("fourHundreds", row.get("fourHundreds").toString());
@@ -270,7 +270,7 @@ public class PlayerCustomRepository extends BaseCustomRepository {
             countQuery += " where " + String.join(" and ", whereQueryParts);
         }
 
-        query += " group by playerId";
+        query += " group by p.id, p.name";
 
         //sort
         List<String> sortList = new ArrayList<>();
@@ -289,27 +289,27 @@ public class PlayerCustomRepository extends BaseCustomRepository {
         query += " order by " + String.join(", ", sortList);
 
         //offset limit
-        query += " limit " + Integer.min(30, filterRequest.getCount()) + " offset " + filterRequest.getOffset();
+        query += " offset " + Integer.min(30, filterRequest.getOffset()) + " rows fetch next " + filterRequest.getCount() + " rows only";
 
         List<Map<String, Object>> countResult = executeRawQuery(countQuery);
-        statsResponse.setCount(Long.parseLong(countResult.get(0).get("count").toString()));
+        statsResponse.setCount(Long.parseLong(countResult.get(0).get("count".toUpperCase()).toString()));
 
         List<Map<String, Object>> result = executeRawQuery(query);
         for(Map<String, Object> row: result)
         {
-            long innings = Long.parseLong(row.get("innings").toString());
+            long innings = Long.parseLong(row.get("innings".toUpperCase()).toString());
             if (innings > 0L) {
                 Map<String, String> stats = new HashMap<>();
 
-                stats.put("id", row.get("playerid").toString());
-                stats.put("name", row.get("name").toString());
+                stats.put("id", row.get("playerid".toUpperCase()).toString());
+                stats.put("name", row.get("name".toUpperCase()).toString());
                 stats.put("innings", String.valueOf(innings));
-                stats.put("wickets", row.get("wickets").toString());
-                stats.put("runs", row.get("runs").toString());
-                stats.put("balls", row.get("balls").toString());
-                stats.put("maidens", row.get("maidens").toString());
-                stats.put("fifers", row.get("fifers").toString());
-                stats.put("tenWickets", row.get("tenwickets").toString());
+                stats.put("wickets", row.get("wickets".toUpperCase()).toString());
+                stats.put("runs", row.get("runs".toUpperCase()).toString());
+                stats.put("balls", row.get("balls".toUpperCase()).toString());
+                stats.put("maidens", row.get("maidens".toUpperCase()).toString());
+                stats.put("fifers", row.get("fifers".toUpperCase()).toString());
+                stats.put("tenWickets", row.get("tenwickets".toUpperCase()).toString());
 
                 statList.add(stats);
             }
@@ -382,7 +382,7 @@ public class PlayerCustomRepository extends BaseCustomRepository {
             countQuery += " where " + String.join(" and ", whereQueryParts);
         }
 
-        query += " group by playerId";
+        query += " group by p.id, p.name";
 
         //sort
         List<String> sortList = new ArrayList<>();
@@ -401,22 +401,22 @@ public class PlayerCustomRepository extends BaseCustomRepository {
         query += " order by " + String.join(", ", sortList);
 
         //offset limit
-        query += " limit " + Integer.min(30, filterRequest.getCount()) + " offset " + filterRequest.getOffset();
+        query += " offset " + Integer.min(30, filterRequest.getOffset()) + " rows fetch next " + filterRequest.getCount() + " rows only";
 
         List<Map<String, Object>> countResult = executeRawQuery(countQuery);
-        statsResponse.setCount(Long.parseLong(countResult.get(0).get("count").toString()));
+        statsResponse.setCount(Long.parseLong(countResult.get(0).get("count".toUpperCase()).toString()));
 
         List<Map<String, Object>> result = executeRawQuery(query);
         for(Map<String, Object> row: result)
         {
             Map<String, String> stats = new HashMap<>();
 
-            stats.put("id", row.get("playerid").toString());
-            stats.put("name", row.get("name").toString());
-            stats.put("fielderCatches", row.get("fieldercatches").toString());
-            stats.put("keeperCatches", row.get("keepercatches").toString());
-            stats.put("stumpings", row.get("stumpings").toString());
-            stats.put("runOuts", row.get("runouts").toString());
+            stats.put("id", row.get("playerid".toUpperCase()).toString());
+            stats.put("name", row.get("name".toUpperCase()).toString());
+            stats.put("fielderCatches", row.get("fieldercatches".toUpperCase()).toString());
+            stats.put("keeperCatches", row.get("keepercatches".toUpperCase()).toString());
+            stats.put("stumpings", row.get("stumpings".toUpperCase()).toString());
+            stats.put("runOuts", row.get("runouts".toUpperCase()).toString());
 
             statList.add(stats);
         }

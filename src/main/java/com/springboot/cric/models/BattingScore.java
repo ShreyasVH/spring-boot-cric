@@ -25,7 +25,7 @@ public class BattingScore {
     private Integer dismissalModeId;
     private Integer bowlerId;
     private Integer innings;
-    private Integer number;
+    private Integer position;
 
     public BattingScore(BattingScoreRequest battingScoreRequest, Map<Long, Integer> matchPlayerMap)
     {
@@ -35,7 +35,7 @@ public class BattingScore {
         this.sixes = battingScoreRequest.getSixes();
         this.dismissalModeId = battingScoreRequest.getDismissalModeId();
         this.innings = battingScoreRequest.getInnings();
-        this.number = battingScoreRequest.getNumber();
+        this.position = battingScoreRequest.getNumber();
         this.matchPlayerId = matchPlayerMap.get(battingScoreRequest.getPlayerId());
         if(null != battingScoreRequest.getBowlerId())
         {

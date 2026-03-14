@@ -6,6 +6,6 @@ CREATE TABLE stadiums
     state VARCHAR2(100),
     country_id NUMBER(19) NOT NULL,
     CONSTRAINT pk_stadiums PRIMARY KEY (id),
-    CONSTRAINT uk_s_name_country UNIQUE (name, country_id),
+    CONSTRAINT uk_s_name_country_city UNIQUE (name, country_id, city),
     CONSTRAINT fk_stadiums_country_id FOREIGN KEY (country_id) REFERENCES countries (id)
 );

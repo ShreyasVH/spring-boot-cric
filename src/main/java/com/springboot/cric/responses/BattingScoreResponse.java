@@ -34,6 +34,6 @@ public class BattingScoreResponse
         this.bowler = bowler;
         this.fielders = fielders;
         this.innings = battingScore.getInnings();
-        this.number = battingScore.getNumber();
+        this.number = battingScore.getPosition();
     }
 }
