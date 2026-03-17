@@ -4,3 +4,6 @@ target
 compile.log
 server.log
 *.iml
+parentUpdates.txt
+dependencyUpdates.txt
+pluginUpdates.txt
