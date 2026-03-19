@@ -22,4 +22,16 @@ public class BaseCustomRepository {
             return result;
         });
     }
+
+    public List<Map<String, Object>> executeRawQuery(String sql, Object... args) {
+        return jdbcTemplate.query(sql, (resultSet, rowNum) -> {
+            int columnCount = resultSet.getMetaData().getColumnCount();
+            Map<String, Object> result = new HashMap<>();
+            for (int i = 0; i < columnCount; i++) {
+                String columnName = resultSet.getMetaData().getColumnLabel(i + 1);
+                result.put(columnName, resultSet.getObject(i + 1));
+            }
+            return result;
+        }, args);
+    }
 }

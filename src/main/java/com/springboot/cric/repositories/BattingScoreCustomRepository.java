@@ -16,8 +16,8 @@ public class BattingScoreCustomRepository extends BaseCustomRepository {
     public Map<String, Map<String, Integer>> getDismissalStats(Long playerId)
     {
         Map<String, Map<String, Integer>> stats = new HashMap<>();
-        String query = "SELECT dm.name AS dismissalMode, COUNT(*) AS count, gt.name as gameType FROM batting_scores bs INNER JOIN match_player_map mpm on mpm.id = bs.match_player_id inner join dismissal_modes dm ON mpm.player_id = " + playerId + " AND bs.dismissal_mode_id IS NOT NULL and dm.id = bs.dismissal_mode_id and dm.name != 'Retired Hurt' inner join matches m on m.id = mpm.match_id and m.is_official = true inner join series s on s.id = m.series_id inner join teams t on t.id = mpm.team_id inner join team_types tt on tt.id = t.type_id and tt.name = 'International' inner join game_types gt on gt.id = s.game_type_id GROUP BY gt.name, dm.name";
-        List<Map<String, Object>> result = executeRawQuery(query);
+        String query = "SELECT dm.name AS dismissalMode, COUNT(*) AS count, gt.name as gameType FROM batting_scores bs INNER JOIN match_player_map mpm on mpm.id = bs.match_player_id inner join dismissal_modes dm ON mpm.player_id = ? AND bs.dismissal_mode_id IS NOT NULL and dm.id = bs.dismissal_mode_id and dm.name != 'Retired Hurt' inner join matches m on m.id = mpm.match_id and m.is_official = true inner join series s on s.id = m.series_id inner join teams t on t.id = mpm.team_id inner join team_types tt on tt.id = t.type_id and tt.name = 'International' inner join game_types gt on gt.id = s.game_type_id GROUP BY gt.name, dm.name";
+        List<Map<String, Object>> result = executeRawQuery(query, playerId);
 
         for(Map<String, Object> row: result)
         {
