@@ -17,19 +17,19 @@ public class BowlingFigureCustomRepository extends BaseCustomRepository {
 
         for(Map<String, Object> row: result)
         {
-            String gameType = row.get("gametype").toString();
-            int innings = Integer.parseInt(row.get("innings").toString());
+            String gameType = row.get("gametype".toUpperCase()).toString();
+            int innings = Integer.parseInt(row.get("innings".toUpperCase()).toString());
             if(innings > 0)
             {
                 Map<String, Integer> stats = new HashMap<>();
 
                 stats.put("innings", innings);
-                stats.put("runs", Integer.parseInt(row.get("runs").toString()));
-                stats.put("balls", Integer.parseInt(row.get("balls").toString()));
-                stats.put("maidens", Integer.parseInt(row.get("maidens").toString()));
-                stats.put("wickets", Integer.parseInt(row.get("wickets").toString()));
-                stats.put("fifers", Integer.parseInt(row.get("fifers").toString()));
-                stats.put("tenWickets", Integer.parseInt(row.get("tenwickets").toString()));
+                stats.put("runs", Integer.parseInt(row.get("runs".toUpperCase()).toString()));
+                stats.put("balls", Integer.parseInt(row.get("balls".toUpperCase()).toString()));
+                stats.put("maidens", Integer.parseInt(row.get("maidens".toUpperCase()).toString()));
+                stats.put("wickets", Integer.parseInt(row.get("wickets".toUpperCase()).toString()));
+                stats.put("fifers", Integer.parseInt(row.get("fifers".toUpperCase()).toString()));
+                stats.put("tenWickets", Integer.parseInt(row.get("tenwickets".toUpperCase()).toString()));
 
                 statsFinal.put(gameType, stats);
             }

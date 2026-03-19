@@ -17,16 +17,16 @@ public class FielderDismissalCustomRepository extends BaseCustomRepository {
 
         for(Map<String, Object> row: result)
         {
-            String gameType = row.get("gametype").toString();
+            String gameType = row.get("gametype".toUpperCase()).toString();
             if(statsFinal.containsKey(gameType))
             {
-                statsFinal.get(gameType).put(row.get("dismissalmode").toString(), Integer.parseInt(row.get("count").toString()));
+                statsFinal.get(gameType).put(row.get("dismissalmode".toUpperCase()).toString(), Integer.parseInt(row.get("count".toUpperCase()).toString()));
             }
             else
             {
                 statsFinal.put(gameType, new HashMap<>(){
                     {
-                        put(row.get("dismissalmode").toString(), Integer.parseInt(row.get("count").toString()));
+                        put(row.get("dismissalmode".toUpperCase()).toString(), Integer.parseInt(row.get("count".toUpperCase()).toString()));
                     }
                 });
             }

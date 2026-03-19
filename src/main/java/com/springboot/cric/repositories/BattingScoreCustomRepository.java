@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @Repository
@@ -20,16 +21,16 @@ public class BattingScoreCustomRepository extends BaseCustomRepository {
 
         for(Map<String, Object> row: result)
         {
-            String gameType = row.get("gametype").toString();
+            String gameType = row.get("gametype".toUpperCase()).toString();
             if(stats.containsKey(gameType))
             {
-                stats.get(gameType).put(row.get("dismissalmode").toString(), Integer.parseInt(row.get("count").toString()));
+                stats.get(gameType).put(row.get("dismissalmode".toUpperCase()).toString(), Integer.parseInt(row.get("count".toUpperCase()).toString()));
             }
             else
             {
                 Map<String, Integer> partStats = new HashMap<>(){
                     {
-                        put(row.get("dismissalmode").toString(), Integer.parseInt(row.get("count").toString()));
+                        put(row.get("dismissalmode".toUpperCase()).toString(), Integer.parseInt(row.get("count".toUpperCase()).toString()));
                     }
                 };
                 stats.put(gameType, partStats);
@@ -48,24 +49,24 @@ public class BattingScoreCustomRepository extends BaseCustomRepository {
 
         for(Map<String, Object> row: result)
         {
-            int innings = Integer.parseInt(row.get("innings").toString());
+            int innings = Integer.parseInt(row.get("innings".toUpperCase()).toString());
             if(innings > 0)
             {
                 Map<String, Integer> stats = new HashMap<>();
 
                 stats.put("innings", innings);
-                stats.put("runs", Integer.parseInt(row.get("runs").toString()));
-                stats.put("balls", Integer.parseInt(row.get("balls").toString()));
-                stats.put("fours", Integer.parseInt(row.get("fours").toString()));
-                stats.put("sixes", Integer.parseInt(row.get("sixes").toString()));
-                stats.put("highest", Integer.parseInt(row.get("highest").toString()));
-                stats.put("fifties", Integer.parseInt(row.get("fifties").toString()));
-                stats.put("hundreds", Integer.parseInt(row.get("hundreds").toString()));
-                stats.put("twoHundreds", Integer.parseInt(row.get("twohundreds").toString()));
-                stats.put("threeHundreds", Integer.parseInt(row.get("threehundreds").toString()));
-                stats.put("fourHundreds", Integer.parseInt(row.get("fourhundreds").toString()));
+                stats.put("runs", Integer.parseInt(row.get("runs".toUpperCase()).toString()));
+                stats.put("balls", Integer.parseInt(row.get("balls".toUpperCase()).toString()));
+                stats.put("fours", Integer.parseInt(row.get("fours".toUpperCase()).toString()));
+                stats.put("sixes", Integer.parseInt(row.get("sixes".toUpperCase()).toString()));
+                stats.put("highest", Integer.parseInt(row.get("highest".toUpperCase()).toString()));
+                stats.put("fifties", Integer.parseInt(row.get("fifties".toUpperCase()).toString()));
+                stats.put("hundreds", Integer.parseInt(row.get("hundreds".toUpperCase()).toString()));
+                stats.put("twoHundreds", Integer.parseInt(row.get("twohundreds".toUpperCase()).toString()));
+                stats.put("threeHundreds", Integer.parseInt(row.get("threehundreds".toUpperCase()).toString()));
+                stats.put("fourHundreds", Integer.parseInt(row.get("fourhundreds".toUpperCase()).toString()));
 
-                String gameType = row.get("gametype").toString();
+                String gameType = row.get("gametype".toUpperCase()).toString();
                 statsFinal.put(gameType, stats);
             }
         }
