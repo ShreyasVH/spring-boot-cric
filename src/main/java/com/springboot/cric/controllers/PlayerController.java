@@ -153,18 +153,18 @@ public class PlayerController {
             playerResponse.setBowlingStats(bowlingStatsFinal);
         }
 
-//        Map<String, Map<String, Integer>> fieldingStatsMap = fielderDismissalService.getFieldingStats(id);
-//        if(!fieldingStatsMap.keySet().isEmpty())
-//        {
-//            Map<String, FieldingStats> fieldingStatsMapFinal = new HashMap<>();
-//            for(String gameType: fieldingStatsMap.keySet())
-//            {
-//                FieldingStats fieldingStats = new FieldingStats(fieldingStatsMap.get(gameType));
-//                fieldingStatsMapFinal.put(gameType, fieldingStats);
-//            }
-//
-//            playerResponse.setFieldingStats(fieldingStatsMapFinal);
-//        }
+        Map<String, Map<String, Integer>> fieldingStatsMap = fielderDismissalService.getFieldingStats(id);
+        if(!fieldingStatsMap.keySet().isEmpty())
+        {
+            Map<String, FieldingStats> fieldingStatsMapFinal = new HashMap<>();
+            for(String gameType: fieldingStatsMap.keySet())
+            {
+                FieldingStats fieldingStats = new FieldingStats(fieldingStatsMap.get(gameType));
+                fieldingStatsMapFinal.put(gameType, fieldingStats);
+            }
+
+            playerResponse.setFieldingStats(fieldingStatsMapFinal);
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body(new Response(playerResponse));
     }
