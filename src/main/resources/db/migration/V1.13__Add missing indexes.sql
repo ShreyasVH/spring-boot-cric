@@ -1,7 +1,5 @@
 CREATE INDEX index_bs_match_player ON batting_scores (match_player_id);
 
-CREATE INDEX index_bs_dismissal_mode ON batting_scores (dismissal_mode_id);
-
 CREATE INDEX index_m_series ON matches (series_id);
 
 CREATE INDEX index_t_type ON teams (type_id);
