@@ -11,7 +11,7 @@ public class BaseCustomRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<Map<String, Object>> executeRawQuery(String sql) {
+    public List<Map<String, Object>> executeRawQuery(String sql, Object... args) {
         return jdbcTemplate.query(sql, (resultSet, rowNum) -> {
             int columnCount = resultSet.getMetaData().getColumnCount();
             Map<String, Object> result = new HashMap<>();
@@ -20,6 +20,6 @@ public class BaseCustomRepository {
                 result.put(columnName, resultSet.getObject(i + 1));
             }
             return result;
-        });
+        }, args);
     }
 }
