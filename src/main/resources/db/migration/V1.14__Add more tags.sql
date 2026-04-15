@@ -1,0 +1,4 @@
+INSERT INTO tags (name) VALUES ('CPL');
+INSERT INTO tags (name) VALUES ('CHALLENGER');
+INSERT INTO tags (name) VALUES ('QUALIFIER_1');
+INSERT INTO tags (name) VALUES ('QUALIFIER_2');
