@@ -6,8 +6,10 @@ export PATH=
 
 export PORT=
 
-export POSTGRES_IP=
-export POSTGRES_PORT=
-export POSTGRES_DB=
-export POSTGRES_USER=
-export POSTGRES_PASSWORD=
+export ORACLE_IP=
+export ORACLE_PORT=
+export ORACLE_PDB=
+export ORACLE_USERNAME=
+export ORACLE_PASSWORD=
+export ORACLE_USERNAME_ADMIN=
+export ORACLE_PASSWORD_ADMIN=
