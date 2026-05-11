@@ -6,8 +6,10 @@ export PATH=
 
 export PORT=
 
-export POSTGRES_IP=
-export POSTGRES_PORT=
-export POSTGRES_DB=
-export POSTGRES_USER=
-export POSTGRES_PASSWORD=
+export ORACLE_IP=127.0.0.1
+export ORACLE_PORT=1521
+export ORACLE_PDB=FREEPDB1
+export ORACLE_USERNAME=cric_springboot
+export ORACLE_PASSWORD=password
+export ORACLE_USERNAME_ADMIN=system
+export ORACLE_PASSWORD_ADMIN=MySecurePass
