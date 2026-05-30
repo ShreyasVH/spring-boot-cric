@@ -32,7 +32,7 @@ public class TeamService {
     }
 
     public List<Team> getAll(int page, int limit) {
-        Sort sort = Sort.by(Sort.Direction.fromString("asc"), "name");
+        Sort sort = Sort.by(Sort.Order.asc("name"), Sort.Order.asc("countryId"), Sort.Order.asc("typeId"));
         PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
         Page<Team> teamsPage = teamRepository.findAll(pageRequest);
         return teamsPage.getContent();

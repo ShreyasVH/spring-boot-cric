@@ -30,7 +30,7 @@ public class StadiumService {
     }
 
     public List<Stadium> getAll(int page, int limit) {
-        Sort sort = Sort.by(Sort.Direction.fromString("asc"), "name");
+        Sort sort = Sort.by(Sort.Order.asc("name"), Sort.Order.asc("countryId"), Sort.Order.asc("city"));
         PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
         Page<Stadium> stadiumsPage = stadiumRepository.findAll(pageRequest);
         return stadiumsPage.getContent();
