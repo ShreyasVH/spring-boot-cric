@@ -30,7 +30,7 @@ public class PlayerService {
     }
 
     public List<Player> getAll(int page, int limit) {
-        Sort sort = Sort.by(Sort.Direction.fromString("asc"), "name");
+        Sort sort = Sort.by(Sort.Order.asc("name"), Sort.Order.asc("countryId"), Sort.Order.asc("dateOfBirth"));
         PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
         Page<Player> playersPage = playerRepository.findAll(pageRequest);
         return playersPage.getContent();
@@ -55,7 +55,7 @@ public class PlayerService {
     }
 
     public List<Player> search(String keyword, int page, int limit) {
-        Sort sort = Sort.by(Sort.Direction.fromString("asc"), "name");
+        Sort sort = Sort.by(Sort.Order.asc("name"), Sort.Order.asc("countryId"), Sort.Order.asc("dateOfBirth"));
         PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
         Page<Player> playersPage = playerRepository.findByNameContainingIgnoreCase(keyword, pageRequest);
         return playersPage.getContent();

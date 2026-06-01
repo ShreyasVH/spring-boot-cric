@@ -43,7 +43,7 @@ public class TourService {
     }
 
     public List<Tour> getAllForYear(int year, int page, int limit) {
-        Sort sort = Sort.by(Sort.Direction.fromString("desc"), "startTime");
+        Sort sort = Sort.by(Sort.Order.asc("name"), Sort.Order.asc("startTime"));
         PageRequest pageRequest = PageRequest.of(page - 1, limit, sort);
         LocalDateTime startTime = LocalDateTime.of(year, 1, 1, 0, 0, 0);
         LocalDateTime endTime = startTime.plusYears(1L);
