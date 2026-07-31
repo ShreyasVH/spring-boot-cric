@@ -393,9 +393,11 @@ public class MatchController {
         List<FielderDismissal> fielderDismissals = fielderDismissalService.get(matchPlayerIds);
         Map<Integer, List<FielderDismissal>> fielderDismissalMap = fielderDismissals.stream().collect(Collectors.groupingBy(FielderDismissal::getScoreId, Collectors.mapping(fielderDismissal -> fielderDismissal, Collectors.toList())));
 
-        List<TagMap> tagMaps = tagMapService.get(TagEntityType.MATCH.name(), id);
-        List<Integer> tagIds = tagMaps.stream().map(TagMap::getTagId).collect(Collectors.toList());
-        List<Tag> tags = tagsService.getByIds(tagIds);
+        List<Tag> matchTags = tagsService.getByType(TagEntityType.MATCH.name());
+        List<Integer> matchTagIds = matchTags.stream().map(Tag::getId).toList();
+        List<TagMap> tagMaps = tagMapService.get(id, matchTagIds);
+        List<Integer> tagIds = tagMaps.stream().map(TagMap::getTagId).toList();
+        List<Tag> tags = matchTags.stream().filter(t -> tagIds.contains(t.getId())).toList();
 
         List<BattingScoreResponse> battingScoreResponses = new ArrayList<>();
         for(BattingScore battingScore: battingScores)
