@@ -13,18 +13,9 @@ public class TagMapService {
     @Autowired
     private TagMapRepository tagMapRepository;
 
-    public void create(Integer entityId, List<Integer> tagIds, String tagEntityType) {
-        List<TagMap> tagMaps = tagIds.stream().map(tagId -> new TagMap(null, tagEntityType, entityId, tagId)).collect(Collectors.toList());
+    public void create(Integer entityId, List<Integer> tagIds) {
+        List<TagMap> tagMaps = tagIds.stream().map(tagId -> new TagMap(null, entityId, tagId)).collect(Collectors.toList());
         tagMapRepository.saveAll(tagMaps);
-    }
-
-    public List<TagMap> get(String tagEntityType, Integer entityId) {
-        return tagMapRepository.findAllByEntityTypeAndEntityId(tagEntityType, entityId);
-    }
-
-    public void remove(String entityType, Integer entityId)
-    {
-        tagMapRepository.deleteAll(get(entityType, entityId));
     }
 
     public void remove(Integer entityId, List<Integer> seriesTagIds)

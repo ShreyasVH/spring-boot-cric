@@ -6,6 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TagMapRepository extends JpaRepository<TagMap, Long> {
-    List<TagMap> findAllByEntityTypeAndEntityId(String entityType, Integer entityId);
     List<TagMap> findAllByEntityIdAndTagIdIn(Integer entityId, List<Integer> tagIds);
 }

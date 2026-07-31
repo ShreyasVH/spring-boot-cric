@@ -244,7 +244,7 @@ public class MatchController {
         captainService.add(createRequest.getCaptains(), playerToMatchPlayerMap);
         wicketKeeperService.add(createRequest.getWicketKeepers(), playerToMatchPlayerMap);
         totalsService.add(createRequest.getTotals().stream().map(total -> new Total(match.getId(), total)).collect(Collectors.toList()));
-        tagMapService.create(match.getId(), createRequest.getTags(), TagEntityType.MATCH.name());
+        tagMapService.create(match.getId(), createRequest.getTags());
 
         Map<Long, List<PlayerMiniResponse>> teamPlayerMap = new HashMap<>();
         for(Player player: allPlayers)
@@ -491,7 +491,7 @@ public class MatchController {
         List<Tag> matchTags = tagsService.getByType(TagEntityType.MATCH.name());
         List<Integer> matchTagIds = matchTags.stream().map(Tag::getId).toList();
         tagMapService.remove(id, matchTagIds);
-        
+
         extrasService.remove(id);
         captainService.remove(matchPlayerIds);
         wicketKeeperService.remove(matchPlayerIds);
