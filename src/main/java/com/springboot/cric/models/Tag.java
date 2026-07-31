@@ -14,4 +14,5 @@ public class Tag
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    private String type;
 }

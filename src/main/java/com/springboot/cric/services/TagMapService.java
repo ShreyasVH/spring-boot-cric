@@ -26,4 +26,13 @@ public class TagMapService {
     {
         tagMapRepository.deleteAll(get(entityType, entityId));
     }
+
+    public void remove(Integer entityId, List<Integer> seriesTagIds)
+    {
+        tagMapRepository.deleteAll(get(entityId, seriesTagIds));
+    }
+
+    public List<TagMap> get(Integer entityId, List<Integer> tagIds) {
+        return tagMapRepository.findAllByEntityIdAndTagIdIn(entityId, tagIds);
+    }
 }

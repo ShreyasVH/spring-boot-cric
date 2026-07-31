@@ -29,4 +29,8 @@ public class TagsService {
     public List<Tag> getByIds(List<Integer> ids) {
         return tagsRepository.findByIdIn(ids);
     }
+
+    public List<Tag> getByType(String type) {
+        return tagsRepository.findByType(type);
+    }
 }

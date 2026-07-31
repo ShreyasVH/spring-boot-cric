@@ -389,9 +389,11 @@ public class SeriesController {
             );
         }).collect(Collectors.toList());
 
-        List<TagMap> tagMaps = tagMapService.get(TagEntityType.SERIES.name(), id);
-        List<Integer> tagIds = tagMaps.stream().map(TagMap::getTagId).collect(Collectors.toList());
-        List<Tag> tags = tagsService.getByIds(tagIds);
+        List<Tag> seriesTags = tagsService.getByType(TagEntityType.SERIES.name());
+        List<Integer> seriesTagIds = seriesTags.stream().map(Tag::getId).toList();
+        List<TagMap> tagMaps = tagMapService.get(id, seriesTagIds);
+        List<Integer> tagIds = tagMaps.stream().map(TagMap::getTagId).toList();
+        List<Tag> tags = seriesTags.stream().filter(t -> tagIds.contains(t.getId())).collect(Collectors.toList());
 
         SeriesDetailedResponse seriesResponse = new SeriesDetailedResponse(series, seriesType, gameType, teamResponses, matchMiniResponses, tags);
 
@@ -412,10 +414,13 @@ public class SeriesController {
             throw new ConflictException("Matches still exist");
         }
 
+        List<Tag> seriesTags = tagsService.getByType(TagEntityType.SERIES.name());
+        List<Integer> seriesTagIds = seriesTags.stream().map(Tag::getId).toList();
+
         manOfTheSeriesService.remove(id);
         seriesTeamsMapService.remove(id);
         seriesService.remove(id);
-        tagMapService.remove(TagEntityType.SERIES.name(), id);
+        tagMapService.remove(id, seriesTagIds);
 
         return ResponseEntity.status(HttpStatus.OK).body(new Response("Deleted successfully", true));
     }
