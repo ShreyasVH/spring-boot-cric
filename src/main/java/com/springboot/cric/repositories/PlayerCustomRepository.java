@@ -106,6 +106,9 @@ public class PlayerCustomRepository extends BaseCustomRepository {
             case "playerName":
                 fieldName = "p.name";
                 break;
+            case "seriesTags":
+                fieldName = "tm.tag_id";
+                break;
         }
 
         return fieldName;
@@ -129,6 +132,11 @@ public class PlayerCustomRepository extends BaseCustomRepository {
                 "inner join series s on s.id = m.series_id " +
                 "inner join stadiums st on st.id = m.stadium_id " +
                 "inner join teams t on t.id = mpm.team_id";
+
+        if (filterRequest.getFilters().containsKey("seriesTags")) {
+            query += " left join tags_map tm on tm.entity_id = s.id";
+            countQuery += " left join tags_map tm on tm.entity_id = s.id";
+        }
 
         //where
         List<String> whereQueryParts = new ArrayList<>();
