@@ -487,7 +487,11 @@ public class MatchController {
 
         List<MatchPlayerMap> matchPlayerMaps = matchPlayerMapService.getByMatchId(id);
         List<Integer> matchPlayerIds = matchPlayerMaps.stream().map(MatchPlayerMap::getId).collect(Collectors.toList());
-        tagMapService.remove(TagEntityType.MATCH.name(), id);
+
+        List<Tag> matchTags = tagsService.getByType(TagEntityType.MATCH.name());
+        List<Integer> matchTagIds = matchTags.stream().map(Tag::getId).toList();
+        tagMapService.remove(id, matchTagIds);
+        
         extrasService.remove(id);
         captainService.remove(matchPlayerIds);
         wicketKeeperService.remove(matchPlayerIds);
