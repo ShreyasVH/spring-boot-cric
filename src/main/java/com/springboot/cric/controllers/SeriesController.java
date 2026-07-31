@@ -112,7 +112,7 @@ public class SeriesController {
         Series series = seriesService.create(createRequest);
         seriesTeamsMapService.create(series.getId(), createRequest.getTeams());
         manOfTheSeriesService.add(series.getId(), manOfTheSeriesToAdd);
-        tagMapService.create(series.getId(), createRequest.getTags(), TagEntityType.SERIES.name());
+        tagMapService.create(series.getId(), createRequest.getTags());
 
         List<TeamType> teamTypes = teamTypeService.getByIds(teamTypeIds);
         Map<Integer, TeamType> teamTypeMap = teamTypes.stream().collect(Collectors.toMap(TeamType::getId, teamType -> teamType));

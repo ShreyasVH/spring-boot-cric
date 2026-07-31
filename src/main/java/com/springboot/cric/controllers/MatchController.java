@@ -244,7 +244,7 @@ public class MatchController {
         captainService.add(createRequest.getCaptains(), playerToMatchPlayerMap);
         wicketKeeperService.add(createRequest.getWicketKeepers(), playerToMatchPlayerMap);
         totalsService.add(createRequest.getTotals().stream().map(total -> new Total(match.getId(), total)).collect(Collectors.toList()));
-        tagMapService.create(match.getId(), createRequest.getTags(), TagEntityType.MATCH.name());
+        tagMapService.create(match.getId(), createRequest.getTags());
 
         Map<Long, List<PlayerMiniResponse>> teamPlayerMap = new HashMap<>();
         for(Player player: allPlayers)
@@ -393,9 +393,11 @@ public class MatchController {
         List<FielderDismissal> fielderDismissals = fielderDismissalService.get(matchPlayerIds);
         Map<Integer, List<FielderDismissal>> fielderDismissalMap = fielderDismissals.stream().collect(Collectors.groupingBy(FielderDismissal::getScoreId, Collectors.mapping(fielderDismissal -> fielderDismissal, Collectors.toList())));
 
-        List<TagMap> tagMaps = tagMapService.get(TagEntityType.MATCH.name(), id);
-        List<Integer> tagIds = tagMaps.stream().map(TagMap::getTagId).collect(Collectors.toList());
-        List<Tag> tags = tagsService.getByIds(tagIds);
+        List<Tag> matchTags = tagsService.getByType(TagEntityType.MATCH.name());
+        List<Integer> matchTagIds = matchTags.stream().map(Tag::getId).toList();
+        List<TagMap> tagMaps = tagMapService.get(id, matchTagIds);
+        List<Integer> tagIds = tagMaps.stream().map(TagMap::getTagId).toList();
+        List<Tag> tags = matchTags.stream().filter(t -> tagIds.contains(t.getId())).toList();
 
         List<BattingScoreResponse> battingScoreResponses = new ArrayList<>();
         for(BattingScore battingScore: battingScores)
@@ -485,7 +487,11 @@ public class MatchController {
 
         List<MatchPlayerMap> matchPlayerMaps = matchPlayerMapService.getByMatchId(id);
         List<Integer> matchPlayerIds = matchPlayerMaps.stream().map(MatchPlayerMap::getId).collect(Collectors.toList());
-        tagMapService.remove(TagEntityType.MATCH.name(), id);
+
+        List<Tag> matchTags = tagsService.getByType(TagEntityType.MATCH.name());
+        List<Integer> matchTagIds = matchTags.stream().map(Tag::getId).toList();
+        tagMapService.remove(id, matchTagIds);
+
         extrasService.remove(id);
         captainService.remove(matchPlayerIds);
         wicketKeeperService.remove(matchPlayerIds);
