@@ -17,8 +17,8 @@
 	<properties>
 		<java.version>25</java.version>
 		<lombok.version>1.18.46</lombok.version>
-		<flyway.version>13.1.0</flyway.version>
-		<openapi.version>3.0.3</openapi.version>
+		<flyway.version>13.2.0</flyway.version>
+		<openapi.version>3.1.0</openapi.version>
 		<ojdbc.version>23.26.3.0.0</ojdbc.version>
 	</properties>
 
