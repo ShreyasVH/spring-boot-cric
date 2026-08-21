@@ -1,5 +1,6 @@
 package com.springboot.cric.services;
 
+import com.springboot.cric.models.BowlingFigure;
 import com.springboot.cric.models.Partnership;
 import com.springboot.cric.repositories.PartnershipRepository;
 import com.springboot.cric.requests.matches.PartnershipRequest;
@@ -23,5 +24,15 @@ public class PartnershipService {
                 new Partnership(partnershipRequest, matchPlayerMaps, false)
         )).collect(Collectors.toList());
         return partnershipRepository.saveAll(partnerships);
+    }
+
+    public List<Partnership> get(List<Integer> matchPlayerIds)
+    {
+        return partnershipRepository.findAllByMatchPlayerIds(matchPlayerIds);
+    }
+
+    public void remove(List<Integer> matchPlayerIds)
+    {
+        partnershipRepository.deleteAll(get(matchPlayerIds));
     }
 }
