@@ -28,11 +28,16 @@ public class PartnershipService {
 
     public List<Partnership> get(List<Integer> matchPlayerIds)
     {
+        return partnershipRepository.findAllByMatchPlayerIdsPrimary(matchPlayerIds);
+    }
+
+    public List<Partnership> getAll(List<Integer> matchPlayerIds)
+    {
         return partnershipRepository.findAllByMatchPlayerIds(matchPlayerIds);
     }
 
     public void remove(List<Integer> matchPlayerIds)
     {
-        partnershipRepository.deleteAll(get(matchPlayerIds));
+        partnershipRepository.deleteAll(getAll(matchPlayerIds));
     }
 }

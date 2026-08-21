@@ -12,4 +12,9 @@ public interface PartnershipRepository extends JpaRepository<Partnership, Intege
     SELECT p FROM Partnership p WHERE p.matchPlayerId1 IN :matchPlayerIds OR p.matchPlayerId2 IN :matchPlayerIds
     """)
     List<Partnership> findAllByMatchPlayerIds(@Param("matchPlayerIds") List<Integer> matchPlayerIds);
+
+    @Query("""
+    SELECT p FROM Partnership p WHERE (p.matchPlayerId1 IN :matchPlayerIds OR p.matchPlayerId2 IN :matchPlayerIds) AND p.primaryEntry = true
+    """)
+    List<Partnership> findAllByMatchPlayerIdsPrimary(@Param("matchPlayerIds") List<Integer> matchPlayerIds);
 }

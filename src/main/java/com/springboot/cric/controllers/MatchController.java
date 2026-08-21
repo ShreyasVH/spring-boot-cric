@@ -291,7 +291,8 @@ public class MatchController {
                 createRequest.getManOfTheMatchList(),
                 createRequest.getCaptains(),
                 createRequest.getWicketKeepers(),
-                tags
+                tags,
+                partnershipResponses
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(new Response(matchResponse));
@@ -470,6 +471,18 @@ public class MatchController {
             );
         }).collect(Collectors.toList());
 
+        List<Partnership> partnerships = partnershipService.get(matchPlayerIds);
+        List<PartnershipResponse> partnershipResponses = partnerships.stream().map(partnership -> {
+            PlayerMiniResponse player1 = playerMap.get(matchPlayerToPlayerMap.get(partnership.getMatchPlayerId1()));
+            PlayerMiniResponse player2 = playerMap.get(matchPlayerToPlayerMap.get(partnership.getMatchPlayerId2()));
+
+            return new PartnershipResponse(
+                    partnership,
+                    player1,
+                    player2
+            );
+        }).toList();
+
         MatchResponse matchResponse = new MatchResponse(
                 match,
                 series,
@@ -486,7 +499,8 @@ public class MatchController {
                 manOfTheMatchList.stream().map(motm -> matchPlayerToPlayerMap.get(motm.getMatchPlayerId())).collect(Collectors.toList()),
                 captains.stream().map(captain -> matchPlayerToPlayerMap.get(captain.getMatchPlayerId())).collect(Collectors.toList()),
                 wicketKeepers.stream().map(wicketKeeper -> matchPlayerToPlayerMap.get(wicketKeeper.getMatchPlayerId())).collect(Collectors.toList()),
-                tags
+                tags,
+                partnershipResponses
         );
 
         return ResponseEntity.status(HttpStatus.OK).body(new Response(matchResponse));
