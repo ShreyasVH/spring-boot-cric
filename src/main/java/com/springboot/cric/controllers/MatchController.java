@@ -65,6 +65,8 @@ public class MatchController {
     private TagMapService tagMapService;
     @Autowired
     private TagsService tagsService;
+    @Autowired
+    private PartnershipService partnershipService;
 
     @Transactional
     @PostMapping("/cric/v1/matches")
@@ -245,6 +247,21 @@ public class MatchController {
         wicketKeeperService.add(createRequest.getWicketKeepers(), playerToMatchPlayerMap);
         totalsService.add(createRequest.getTotals().stream().map(total -> new Total(match.getId(), total)).collect(Collectors.toList()));
         tagMapService.create(match.getId(), createRequest.getTags());
+        List<Partnership> partnerships = partnershipService.add(createRequest.getPartnerships(), playerToMatchPlayerMap);
+        Map<String, Partnership> partnershipMap = partnerships.stream().collect(Collectors.toMap(partnership -> partnership.getMatchPlayerId1() + "_" + partnership.getMatchPlayerId2() + "_" + partnership.getInnings() + "_" + partnership.getWicket(), partnership -> partnership));
+
+        List<PartnershipResponse> partnershipResponses = createRequest.getPartnerships().stream().map(partnershipRequest -> {
+            String key = playerToMatchPlayerMap.get(partnershipRequest.getPlayerId1()) + "_" + playerToMatchPlayerMap.get(partnershipRequest.getPlayerId2()) + "_" + partnershipRequest.getInnings() + "_" + partnershipRequest.getWicket();
+            Partnership partnership = partnershipMap.get(key);
+
+            Player player1 = playerMap.get(partnershipRequest.getPlayerId1());
+            Player player2 = playerMap.get(partnershipRequest.getPlayerId2());
+
+            return new PartnershipResponse(
+                    partnership,
+                    new PlayerMiniResponse(player1, new CountryResponse(countryMap.get(player1.getCountryId()))),
+                    new PlayerMiniResponse(player2, new CountryResponse(countryMap.get(player2.getCountryId()))));
+        }).toList();
 
         Map<Long, List<PlayerMiniResponse>> teamPlayerMap = new HashMap<>();
         for(Player player: allPlayers)
