@@ -22,8 +22,13 @@ public class BallwiseDetailService {
         return ballwiseDetailRepository.saveAll(ballwiseDetailList);
     }
 
-//    public void remove(List<Integer> matchPlayerIds)
-//    {
-//        battingScoreRepository.deleteAll(getBattingScores(matchPlayerIds));
-//    }
+    public List<BallwiseDetail> getAll(List<Integer> matchPlayerIds)
+    {
+        return ballwiseDetailRepository.findAllByMatchPlayerIds(matchPlayerIds);
+    }
+
+    public void remove(List<Integer> matchPlayerIds)
+    {
+        ballwiseDetailRepository.deleteAll(getAll(matchPlayerIds));
+    }
 }

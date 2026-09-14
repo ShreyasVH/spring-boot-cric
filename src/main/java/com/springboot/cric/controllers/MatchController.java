@@ -535,6 +535,7 @@ public class MatchController {
         battingScoreService.remove(matchPlayerIds);
         bowlingFigureService.remove(matchPlayerIds);
         partnershipService.remove(matchPlayerIds);
+        ballwiseDetailService.remove(matchPlayerIds);
         matchPlayerMapService.remove(id);
         totalsService.remove(id);
         matchService.remove(id);
