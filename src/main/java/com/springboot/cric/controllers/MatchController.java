@@ -67,6 +67,8 @@ public class MatchController {
     private TagsService tagsService;
     @Autowired
     private PartnershipService partnershipService;
+    @Autowired
+    private BallwiseDetailService ballwiseDetailService;
 
     @Transactional
     @PostMapping("/cric/v1/matches")
@@ -262,6 +264,8 @@ public class MatchController {
                     new PlayerMiniResponse(player1, new CountryResponse(countryMap.get(player1.getCountryId()))),
                     new PlayerMiniResponse(player2, new CountryResponse(countryMap.get(player2.getCountryId()))));
         }).toList();
+
+        ballwiseDetailService.add(createRequest.getBallwiseDetails(), playerToMatchPlayerMap);
 
         Map<Long, List<PlayerMiniResponse>> teamPlayerMap = new HashMap<>();
         for(Player player: allPlayers)
@@ -531,6 +535,7 @@ public class MatchController {
         battingScoreService.remove(matchPlayerIds);
         bowlingFigureService.remove(matchPlayerIds);
         partnershipService.remove(matchPlayerIds);
+        ballwiseDetailService.remove(matchPlayerIds);
         matchPlayerMapService.remove(id);
         totalsService.remove(id);
         matchService.remove(id);
